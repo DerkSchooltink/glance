@@ -38,7 +38,7 @@ export async function signedOgImageUrl(
   spaceSlug: string,
   siteSlug: string,
 ): Promise<string> {
-  return `${contentUrl}/_glance/og/${spaceSlug}/${siteSlug}.png?sig=${await signOgSig(secret, spaceSlug, siteSlug)}&v=3`
+  return `${contentUrl}/_glance/og/${spaceSlug}/${siteSlug}.png?sig=${await signOgSig(secret, spaceSlug, siteSlug)}&v=4`
 }
 
 /** What the card renders. Kept to what the picture needs — the route resolves it, the renderer
@@ -47,7 +47,7 @@ export type OgCard = { title: string; spaceSlug: string; siteSlug: string }
 
 // The brand mark: packages/web/public/favicon.svg with the theme-adaptive <style> flattened to
 // the light-theme rim (satori/resvg render static SVG; a media query would be ignored anyway).
-const BRAND_MARK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="tile" x1="40" y1="24" x2="472" y2="488" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#e8ab44"/><stop offset="0.55" stop-color="#e0a13a"/><stop offset="1" stop-color="#c26248"/></linearGradient></defs><rect x="8" y="8" width="496" height="496" rx="112" fill="url(#tile)"/><rect x="14" y="14" width="484" height="484" rx="106" fill="none" stroke="rgba(18,21,26,0.16)" stroke-width="12"/><path d="M256 132C356 132 442 196 476 256C442 316 356 380 256 380C156 380 70 316 36 256C70 196 156 132 256 132Z" fill="#faf6ec"/><rect x="184" y="184" width="144" height="144" rx="34" fill="#15181e"/><rect x="208" y="222" width="92" height="20" rx="10" fill="#e0a13a"/><circle cx="300" cy="296" r="18" fill="#c26248"/></svg>`
+const BRAND_MARK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect x="8" y="8" width="496" height="496" rx="62" fill="#323dfe"/><rect x="14" y="14" width="484" height="484" rx="56" fill="none" stroke="rgba(9,9,11,0.16)" stroke-width="12"/><path d="M256 132C356 132 442 196 476 256C442 316 356 380 256 380C156 380 70 316 36 256C70 196 156 132 256 132Z" fill="#ffffff"/><rect x="184" y="184" width="144" height="144" rx="18" fill="#09090b"/><rect x="208" y="222" width="92" height="20" rx="4" fill="#323dfe"/><circle cx="300" cy="296" r="18" fill="#ffffff"/></svg>`
 
 const BRAND_MARK_DATA_URI = `data:image/svg+xml;base64,${btoa(BRAND_MARK_SVG)}`
 
@@ -58,19 +58,23 @@ const BRAND_MARK_DATA_URI = `data:image/svg+xml;base64,${btoa(BRAND_MARK_SVG)}`
 const esc = (s: string) => s.replace(/</g, '‹').replace(/>/g, '›')
 
 /** The card markup (satori's HTML subset: everything display:flex, inline styles only). Brand
- *  palette from the mark: dark #15181e, cream #faf6ec, amber #e0a13a. Sizes are for the 1200×630
+ *  palette is Plivo's dark theme: ink ground #09090b, near-white #fafafa, and the brand blue's
+ *  text lift #4d6aff for the one accent line. Display face Sora. Sizes are for the 1200×630
  *  canvas (og-render.ts). The title uses satori's native line-clamp (needs display:block): a
  *  long title ends in a visible ellipsis at exactly three wrapped lines instead of clipping
  *  mid-sentence. */
 export function ogCardHtml(card: OgCard): string {
-  return `<div style="display:flex;flex-direction:column;justify-content:space-between;width:100vw;height:100vh;background:#15181e;padding:72px;font-family:'IBM Plex Sans'">
+  return `<div style="display:flex;flex-direction:column;justify-content:space-between;width:100vw;height:100vh;background:#09090b;padding:72px;font-family:'Sora'">
   <div style="display:flex;align-items:center">
     <img src="${BRAND_MARK_DATA_URI}" width="96" height="96" />
-    <span style="margin-left:28px;font-size:44px;font-weight:600;color:#faf6ec">Glance</span>
+    <div style="display:flex;align-items:baseline;margin-left:28px">
+      <span style="font-size:44px;font-weight:600;letter-spacing:-0.02em;color:#fafafa">Glance</span>
+      <span style="margin-left:14px;font-size:24px;color:#71717a">by Plivo</span>
+    </div>
   </div>
   <div style="display:flex;flex-direction:column">
-    <span style="display:block;line-clamp:3;font-size:64px;font-weight:600;color:#faf6ec;line-height:1.2">${esc(card.title)}</span>
-    <span style="margin-top:24px;font-size:32px;color:#e0a13a">${esc(card.spaceSlug)}/${esc(card.siteSlug)}</span>
+    <span style="display:block;line-clamp:3;font-size:64px;font-weight:600;letter-spacing:-0.03em;color:#fafafa;line-height:1.15">${esc(card.title)}</span>
+    <span style="margin-top:24px;font-size:32px;color:#4d6aff">${esc(card.spaceSlug)}/${esc(card.siteSlug)}</span>
   </div>
 </div>`
 }

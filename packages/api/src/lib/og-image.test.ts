@@ -27,7 +27,7 @@ describe('og signature', () => {
   test('signedOgImageUrl mints the sig as a query param on the CONTENT origin', async () => {
     const sig = await signOgSig(TEST_SIGNING_KEY, 'acme', 'report')
     expect(await signedOgImageUrl(TEST_SIGNING_KEY, 'https://content.example.com', 'acme', 'report')).toBe(
-      `https://content.example.com/_glance/og/acme/report.png?sig=${sig}&v=3`,
+      `https://content.example.com/_glance/og/acme/report.png?sig=${sig}&v=4`,
     )
   })
 })
@@ -40,6 +40,8 @@ describe('ogCardHtml', () => {
     expect(html).not.toContain('&amp;')
     expect(html).toContain('acme/report')
     expect(html).toContain('data:image/svg+xml;base64,') // the brand mark rides inline
+    // …beside a quiet plain-text "by Plivo" byline.
+    expect(html).toContain('>by Plivo</span>')
   })
 
   test('the title span carries satori line-clamp so overlong titles ellipsize at three lines', () => {

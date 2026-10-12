@@ -13,10 +13,10 @@ import { type OgCard, ogCardHtml } from './og-image'
  *  more than the rest of the worker combined, and Slack's own image cache makes renders rare. */
 export async function renderOgPng(card: OgCard): Promise<Response> {
   const { ImageResponse, loadGoogleFont } = await import('workers-og')
-  const font = await loadGoogleFont({ family: 'IBM Plex Sans', weight: 600 })
+  const font = await loadGoogleFont({ family: 'Sora', weight: 600 })
   return new ImageResponse(ogCardHtml(card), {
     width: 1200,
     height: 630,
-    fonts: [{ name: 'IBM Plex Sans', data: font, weight: 600, style: 'normal' }],
+    fonts: [{ name: 'Sora', data: font, weight: 600, style: 'normal' }],
   })
 }
