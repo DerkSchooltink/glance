@@ -29,6 +29,7 @@
     "packages/web": {
       "name": "@glance/web",
       "dependencies": {
+        "@plivo/tokens": "github:plivo/design-tokens#8f0e3ba8c22df6ec833cdf59865126d8720f8e84",
         "@tailwindcss/vite": "^4.3.1",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -263,6 +264,8 @@
     "@oslojs/jwt": ["@oslojs/jwt@0.2.0", "", { "dependencies": { "@oslojs/encoding": "0.4.1" } }, "sha512-bLE7BtHrURedCn4Mco3ma9L4Y1GR2SMBuIvjWr7rmQ4/W/4Jy70TIAgZ+0nIlk0xHz1vNP8x8DCns45Sb2XRbg=="],
 
     "@oxc-project/types": ["@oxc-project/types@0.137.0", "", {}, "sha512-WT+Gb24i8hmvo85AIv2oEYouEXkRlKAlT9WaCa3TfLgNCN+GhrJOGZuIlMouAh38Qe4QOx26eUOVsq70qXrywA=="],
+
+    "@plivo/tokens": ["@plivo/tokens@github:plivo/design-tokens#8f0e3ba", {}, "plivo-design-tokens-8f0e3ba", "sha512-4W7dIWbJp90J5QPCAVrbdr7+CWRI7P1R6H61AbOV44w1MPvXTFzlHRqqZg61lCPsfWnQfQbTduKY5wI8W1p2lQ=="],
 
     "@poppinss/colors": ["@poppinss/colors@4.1.6", "", { "dependencies": { "kleur": "^4.1.5" } }, "sha512-H9xkIdFswbS8n1d6vmRd8+c10t2Qe+rZITbbDHHkQixH5+2x1FDGmi/0K+WgWiqQFKPSlIYB7jlH6Kpfn6Fleg=="],
 

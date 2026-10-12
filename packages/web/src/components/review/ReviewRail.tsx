@@ -173,7 +173,7 @@ export function ReviewRail({
           const delta = e.key === 'ArrowLeft' ? 24 : -24
           setRailWidth((w) => clampRailWidth(w + delta, window.innerWidth))
         }}
-        className="absolute inset-y-0 -left-1 z-10 hidden w-2 cursor-col-resize touch-none hover:bg-primary/30 focus-visible:bg-primary/40 active:bg-primary/40 md:block"
+        className="absolute inset-y-0 -left-1 z-10 hidden w-2 cursor-col-resize touch-none hover:bg-brand/30 focus-visible:bg-brand/40 active:bg-brand/40 md:block"
       />
       <header className="flex items-center justify-between gap-2 border-b px-4 py-3">
         <h2 className="font-semibold text-sm">Comments</h2>
@@ -192,7 +192,7 @@ export function ReviewRail({
           wins" the DEFAULT state on every text selection, and would spend ~100px of a 55vh mobile
           bottom sheet on every reader who came only to read. */}
       {composing ? (
-        <div className="border-b bg-muted/40 p-3">
+        <div className="border-b bg-surface p-3">
           <Composer
             autoFocus
             focusOn={composing}

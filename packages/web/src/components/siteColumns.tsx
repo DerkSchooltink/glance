@@ -45,7 +45,7 @@ function StarCell({ site }: { site: SiteSummary }) {
       aria-pressed={starred}
       onClick={toggle}
     >
-      <Star className={starred ? 'fill-primary text-primary' : 'opacity-40'} />
+      <Star className={starred ? 'fill-brand text-brand' : 'opacity-40'} />
     </Button>
   )
 }
@@ -59,8 +59,8 @@ export function nameColumn<T extends SiteSummary>(): Column<T> {
     compare: (a, b) => (a.title ?? a.siteSlug).localeCompare(b.title ?? b.siteSlug),
     render: (s) => (
       <div className="flex items-center gap-2">
-        {s.audio && <Mic className="size-3.5 shrink-0 text-primary" aria-label="Audio" />}
-        {s.hasSummary && <Sparkles className="size-3.5 shrink-0 text-primary" aria-label="Has AI summary" />}
+        {s.audio && <Mic className="size-3.5 shrink-0 text-muted-foreground" aria-label="Audio" />}
+        {s.hasSummary && <Sparkles className="size-3.5 shrink-0 text-muted-foreground" aria-label="Has AI summary" />}
         <span className="truncate font-medium">{s.title ?? s.siteSlug}</span>
         {s.status === 'archived' && <Badge variant="secondary">archived</Badge>}
         {/* "Shared with me" feed only: an editor grantee can redeploy this site's content. */}

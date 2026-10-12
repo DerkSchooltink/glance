@@ -139,7 +139,7 @@ export function RecordDialog({
         {stopped ? (
           <div className="space-y-4">
             {previewUrl && (
-              <div className="rounded-md border bg-muted/40 px-3 py-2.5">
+              <div className="rounded-md border bg-surface px-3 py-2.5">
                 <AudioPlayer src={previewUrl} />
               </div>
             )}
@@ -177,7 +177,7 @@ export function RecordDialog({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="size-11 rounded-full"
+                  className="size-11"
                   aria-label={rec.state === 'paused' ? 'Resume recording' : 'Pause recording'}
                   onClick={rec.state === 'paused' ? rec.resume : rec.pause}
                 >

@@ -18,9 +18,11 @@ export const VISIBILITY_META: Record<
   Visibility,
   { label: string; hint: string; icon: LucideIcon; badge: string }
 > = {
-  private: { label: 'Private', hint: 'Only you', icon: Lock, badge: 'bg-muted text-muted-foreground' },
-  members: { label: 'Members', hint: 'This space only', icon: Users, badge: 'bg-sky-500/15 text-sky-600 dark:text-sky-300' },
-  team: { label: 'Team', hint: 'Everyone in your org', icon: Building2, badge: 'bg-primary/15 text-primary' },
+  // Neutral tags: visibility is not a status, so it carries no hue — the icon and label do the
+  // work, and the quieter ink marks the narrowest tier.
+  private: { label: 'Private', hint: 'Only you', icon: Lock, badge: 'bg-secondary text-muted-foreground' },
+  members: { label: 'Members', hint: 'This space only', icon: Users, badge: 'bg-secondary text-foreground/80' },
+  team: { label: 'Team', hint: 'Everyone in your org', icon: Building2, badge: 'bg-secondary text-foreground/80' },
 }
 
 export function VisibilityBadge({ value, className }: { value: Visibility; className?: string }) {
@@ -29,7 +31,7 @@ export function VisibilityBadge({ value, className }: { value: Visibility; class
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium',
+        'inline-flex items-center gap-1 rounded-sm px-2 py-0.5 font-mono text-label uppercase',
         m.badge,
         className,
       )}
@@ -63,7 +65,7 @@ export function VisibilityMenu({
             type="button"
             disabled={disabled}
             className={cn(
-              'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium transition-opacity hover:opacity-80 disabled:opacity-50',
+              'inline-flex items-center gap-1 rounded-sm px-2 py-0.5 font-mono text-label uppercase transition-colors hover:bg-accent disabled:opacity-50',
               m.badge,
             )}
           >

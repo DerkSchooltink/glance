@@ -11,7 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ForkDialog } from '@/components/ForkDialog'
 import { ThemeMenu, patchTheme } from '@/components/theme-select'
 import { VISIBILITY_META, VisibilityBadge, VisibilityMenu } from '@/components/visibility'
-import { BrandMark } from '@/components/states'
+import { BrandMark, ByPlivo } from '@/components/states'
 
 // Lazy: both open only from the menu. A static import puts their chunks in the viewer route's
 // import graph, so the iframe cannot mount until they download.
@@ -64,9 +64,16 @@ export function ViewerTopBar({
   const { starred, toggle: toggleStar } = useStar(site)
   return (
     <header className="flex h-12 shrink-0 items-center gap-2 border-b bg-background px-3 md:gap-3">
-      <Link to="/dashboard" className="flex shrink-0 items-center gap-2 font-mono font-semibold text-sm tracking-tight">
+      <Link
+        to="/dashboard"
+        className="flex shrink-0 items-center gap-2 font-display font-semibold text-sm tracking-[-0.02em]"
+      >
         <BrandMark />
-        glance
+        <span className="flex items-baseline gap-1.5">
+          glance
+          {/* The breadcrumb needs the room on smaller screens; the byline yields first. */}
+          <ByPlivo className="hidden lg:inline" />
+        </span>
       </Link>
 
       <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 text-muted-foreground text-sm">
@@ -111,26 +118,26 @@ export function ViewerTopBar({
         <Button
           variant="ghost"
           size="icon"
-          className="size-8 rounded-full"
+          className="size-8"
           title={starred ? 'Remove star' : 'Star this page'}
           aria-label={starred ? 'Remove star' : 'Star this page'}
           aria-pressed={starred}
           onClick={() => void toggleStar()}
         >
-          <Star className={starred ? 'fill-primary text-primary' : 'opacity-40'} />
+          <Star className={starred ? 'fill-brand text-brand' : 'opacity-40'} />
         </Button>
         <Button
           size="sm"
           variant="ghost"
           onClick={onToggleRail}
           aria-pressed={railOpen}
-          className={cn('gap-1.5', commentCount > 0 && 'text-primary')}
+          className={cn('gap-1.5', commentCount > 0 && 'text-brand-text')}
           title={commentCount > 0 ? `${commentCount} open comment${commentCount === 1 ? '' : 's'}` : 'Comments'}
         >
           <MessageSquare className="size-3.5" />
           Comments
           {commentCount > 0 && (
-            <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 font-semibold text-[10px] text-primary-foreground leading-none tabular-nums">
+            <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-brand px-1 font-semibold text-[10px] text-brand-foreground leading-none tabular-nums">
               {commentCount > 9 ? '9+' : commentCount}
             </span>
           )}

@@ -28,7 +28,7 @@ import {
 import { SitesTable } from '@/components/SitesTable'
 import { SortableTable, type Column } from '@/components/SortableTable'
 import { UserAvatar } from '@/components/UserAvatar'
-import { EmptyState, Spinner } from '@/components/states'
+import { EmptyState, PageHeader, Spinner } from '@/components/states'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -214,14 +214,18 @@ export function Component() {
       {/* Mounted at the route level (not inside a tab), so ?new=space opens it from anywhere. */}
       <NewSpaceDialog />
       <Tabs value={state.activeTab} onValueChange={(t) => setTab(t as TabId)} className="gap-6">
-        <TabsList variant="line">
-          {state.tabs.map((tab) => (
-            <TabsTrigger key={tab.id} value={tab.id}>
-              {tab.label}
-              {tab.count !== null && <TabCount n={tab.count} />}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+        {/* On a phone the tabs scroll sideways here instead of widening the whole page. The 5px
+            pad keeps the active tab's underline (bottom: -5px) from being clipped by the scroller. */}
+        <div className="-mb-[5px] max-w-full overflow-x-auto pb-[5px]">
+          <TabsList variant="line">
+            {state.tabs.map((tab) => (
+              <TabsTrigger key={tab.id} value={tab.id}>
+                {tab.label}
+                {tab.count !== null && <TabCount n={tab.count} />}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
         {state.tabs.map((tab) => (
           <TabsContent key={tab.id} value={tab.id}>
             <TabBody tab={tab} />
@@ -261,10 +265,10 @@ function TabBody({ tab }: { tab: DashboardTab }) {
             sites.length === 0 ? (
               <div className="mx-auto max-w-2xl py-10">
                 <div className="mb-6 flex flex-col items-center gap-3 text-center">
-                  <div className="flex size-11 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+                  <div className="flex size-11 items-center justify-center rounded border bg-background text-muted-foreground">
                     <Rocket className="size-5" />
                   </div>
-                  <div className="font-medium">No sites yet</div>
+                  <div className="font-display text-h4-500">No sites yet</div>
                 </div>
                 <GettingStarted />
               </div>
@@ -351,12 +355,15 @@ function ToolbarSkeleton() {
   // Mirror DashboardToolbar's slim row (heading + subtitle on the left, New button on the right)
   // so the fallback doesn't reflow when the real toolbar streams in.
   return (
-    <div className="flex items-end justify-between gap-4" aria-hidden>
-      <div className="space-y-2">
-        <Skeleton className="h-6 w-40" />
-        <Skeleton className="h-4 w-72" />
+    <div className="flex flex-col gap-4" aria-hidden>
+      <Skeleton className="h-3.5 w-full" />
+      <div className="flex items-end justify-between gap-4">
+        <div className="space-y-2">
+          <Skeleton className="h-7 w-40" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <Skeleton className="h-9 w-24" />
       </div>
-      <Skeleton className="h-9 w-24 rounded-md" />
     </div>
   )
 }
@@ -366,7 +373,7 @@ function TabPanelSkeleton() {
   return (
     <div className="space-y-2" aria-hidden>
       {['a', 'b', 'c', 'd', 'e'].map((k) => (
-        <Skeleton key={k} className="h-12 w-full rounded-lg" />
+        <Skeleton key={k} className="h-12 w-full" />
       ))}
     </div>
   )
@@ -374,7 +381,7 @@ function TabPanelSkeleton() {
 
 function TabCount({ n }: { n: number }) {
   return (
-    <span className="rounded-full bg-muted px-1.5 text-xs tabular-nums text-muted-foreground">{n}</span>
+    <span className="rounded-sm bg-secondary px-1.5 font-mono text-muted-foreground text-xs tabular-nums">{n}</span>
   )
 }
 
@@ -420,7 +427,7 @@ function TeamActivityTable({ team }: { team: TeamUpload[] }) {
 
 function CommentsFeed({ comments }: { comments: CommentFeedItem[] }) {
   return (
-    <ul className="divide-y rounded-xl border">
+    <ul className="divide-y rounded border">
       {comments.map((item) => {
         const path = feedRowPath(item)
         const href = notificationHref({
@@ -440,9 +447,9 @@ function CommentsFeed({ comments }: { comments: CommentFeedItem[] }) {
           <li key={`${item.kind}:${item.id}`}>
             <Link
               to={href}
-              className="flex items-start gap-3 px-4 py-3 transition-colors hover:bg-accent"
+              className="flex items-start gap-3 px-4 py-3 transition-colors hover:bg-surface"
             >
-              <span className="mt-0.5 w-16 shrink-0 rounded bg-muted px-1.5 py-0.5 text-center font-mono text-[10px] text-muted-foreground">
+              <span className="mt-0.5 w-[4.75rem] shrink-0 rounded-sm bg-secondary px-1.5 py-0.5 text-center font-mono text-[10px] text-muted-foreground uppercase tracking-[0.08em]">
                 {item.kind}
               </span>
               <UserAvatar userId={item.actorId} name={item.actorName} className="size-6" />
@@ -494,13 +501,13 @@ function CommentsFeed({ comments }: { comments: CommentFeedItem[] }) {
 // single "New" menu. Creating is one click (record / upload); the sites list leads the page.
 function DashboardToolbar({ spaces }: { spaces: SpaceSummary[] }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4">
-      <div className="space-y-1">
-        <h1 className="font-semibold text-xl tracking-tight">Your work</h1>
-        <p className="text-muted-foreground text-sm">Record a note or drop a folder — everyone gets a URL.</p>
-      </div>
+    <PageHeader
+      eyebrow="dashboard"
+      title="Your work"
+      description="Record a note or drop a folder — everyone gets a URL."
+    >
       <NewMenu spaces={spaces} />
-    </div>
+    </PageHeader>
   )
 }
 
@@ -516,19 +523,19 @@ function AgentSetup() {
   const origin = typeof window !== 'undefined' ? window.location.origin : ''
   const installCmd = `curl -fsSL ${origin}/api/install | sh`
   return (
-    <Card className="gap-4 border-primary/20 bg-primary/[0.03] p-5">
+    <Card className="gap-4 bg-surface p-5">
       <div className="space-y-1">
         <div className="flex items-center gap-2">
-          <Terminal className="size-4 text-primary" />
-          <h2 className="font-medium">Give this to your agent</h2>
+          <Terminal className="size-4 text-muted-foreground" />
+          <h2 className="text-h4-500">Give this to your agent</h2>
         </div>
         <p className="text-muted-foreground text-sm">
           Paste it into Claude, Codex, or Cursor — it installs the CLI and the glance skill, so your
           agent can ship sites and read review comments straight from your terminal.
         </p>
       </div>
-      <div className="flex items-center gap-2 rounded-md border bg-background/60 p-2">
-        <code className="min-w-0 flex-1 truncate font-mono text-sm">{installCmd}</code>
+      <div className="flex items-center gap-2 rounded-md border bg-code p-2">
+        <code className="min-w-0 flex-1 truncate font-mono text-code-foreground text-sm">{installCmd}</code>
         <CopyButton text={installCmd} label="Copy" copiedMessage="Install command copied" />
       </div>
     </Card>
@@ -610,8 +617,8 @@ function InstallDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
           <DialogTitle>Install the glance CLI</DialogTitle>
           <DialogDescription>Deploy from your terminal — and use it as an agent skill.</DialogDescription>
         </DialogHeader>
-        <div className="flex items-center gap-2 rounded-md border bg-muted/40 p-2">
-          <code className="min-w-0 flex-1 truncate font-mono text-sm">{installCmd}</code>
+        <div className="flex items-center gap-2 rounded-md border bg-code p-2">
+          <code className="min-w-0 flex-1 truncate font-mono text-code-foreground text-sm">{installCmd}</code>
           <CopyButton text={installCmd} label="Copy" copiedMessage="Install command copied" />
         </div>
         <p className="text-muted-foreground text-xs">Installs to ~/.local/bin/glance.</p>

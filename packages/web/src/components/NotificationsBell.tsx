@@ -33,7 +33,7 @@ function BellButton({ unread, ...props }: { unread: number } & React.ComponentPr
     <Button variant="ghost" size="icon" className="relative" aria-label="Notifications" {...props}>
       <Bell className="size-4" />
       {unread > 0 && (
-        <span className="-right-0.5 -top-0.5 absolute flex min-w-4 items-center justify-center rounded-full bg-primary px-1 font-mono font-semibold text-[10px] text-primary-foreground leading-4">
+        <span className="-right-0.5 -top-0.5 absolute flex min-w-4 items-center justify-center rounded-full bg-brand px-1 font-mono font-semibold text-[10px] text-brand-foreground leading-4">
           {unread > 9 ? '9+' : unread}
         </span>
       )}
@@ -93,10 +93,10 @@ function BellMenu({ initial }: { initial: NotificationList }) {
                     onClick={() => openItem(n)}
                     className={cn(
                       'flex w-full items-start gap-2 px-3 py-2 text-left text-sm hover:bg-accent',
-                      !n.read && 'bg-primary/5',
+                      !n.read && 'bg-brand/5',
                     )}
                   >
-                    <span className={cn('mt-1.5 size-1.5 shrink-0 rounded-full', n.read ? 'bg-transparent' : 'bg-primary')} />
+                    <span className={cn('mt-1.5 size-1.5 shrink-0 rounded-full', n.read ? 'bg-transparent' : 'bg-brand')} />
                     <UserAvatar userId={n.actorId} name={n.actorName} className="mt-0.5 size-6" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate">

@@ -10,8 +10,8 @@ import { CopyButton } from '@/components/CopyButton'
 // alike so the "grab this" affordance is identical everywhere.
 function CopyRow({ text, copiedMessage }: { text: string; copiedMessage: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-md border bg-muted/40 py-1 pr-1 pl-3">
-      <code className="min-w-0 flex-1 truncate font-mono text-xs" title={text}>
+    <div className="flex items-center gap-2 rounded-md border bg-code py-1 pr-1 pl-3">
+      <code className="min-w-0 flex-1 truncate font-mono text-code-foreground text-xs" title={text}>
         {text}
       </code>
       <CopyButton text={text} label="" copiedMessage={copiedMessage} variant="ghost" size="icon" className="shrink-0" />
@@ -22,7 +22,7 @@ function CopyRow({ text, copiedMessage }: { text: string; copiedMessage: string 
 function Step({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
   return (
     <li className="flex gap-3">
-      <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/15 font-mono font-semibold text-primary text-xs">
+      <span className="flex size-6 shrink-0 items-center justify-center rounded-sm border bg-background font-mono text-foreground/70 text-xs tabular-nums">
         {n}
       </span>
       <div className="min-w-0 flex-1 space-y-2">
@@ -74,7 +74,7 @@ export function GettingStarted() {
         No CLI? Drop a folder or a lone HTML file on the dashboard to ship it straight from the browser.
       </p>
       <p className="text-xs">
-        <Link to="/docs/api-keys" className="font-medium text-primary hover:underline">
+        <Link to="/docs/api-keys" className="font-medium text-brand-text hover:underline">
           Scripting instead? Set up API keys →
         </Link>
       </p>

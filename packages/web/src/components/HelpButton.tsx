@@ -16,7 +16,7 @@ export function HelpButton() {
       <SheetContent side="right" className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
         <SheetHeader className="border-b px-5 py-4">
           <SheetTitle className="flex items-center gap-2">
-            <CircleHelp className="size-4 text-primary" />
+            <CircleHelp className="size-4 text-muted-foreground" />
             Using Glance
           </SheetTitle>
           <SheetDescription className="sr-only">How to install the CLI and publish your first site.</SheetDescription>

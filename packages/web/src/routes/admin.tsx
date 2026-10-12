@@ -208,13 +208,13 @@ function StatCard({ icon: Icon, label, value, sub }: { icon: typeof Eye; label: 
   return (
     <Card className="gap-0 py-4">
       <CardHeader className="px-4 pb-1">
-        <CardTitle className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+        <CardTitle className="flex items-center gap-1.5 font-mono text-label text-muted-foreground uppercase">
           <Icon className="size-3.5" />
           {label}
         </CardTitle>
       </CardHeader>
       <CardContent className="px-4">
-        <div className="text-2xl font-semibold tabular-nums">{value}</div>
+        <div className="font-mono font-semibold text-2xl tabular-nums tracking-tight">{value}</div>
         {sub && <div className="mt-0.5 text-xs text-muted-foreground">{sub}</div>}
       </CardContent>
     </Card>
@@ -239,8 +239,8 @@ function Sparkline({ values, className }: { values: number[]; className?: string
       aria-hidden="true"
       role="presentation"
     >
-      <polygon points={area} className="fill-primary/10" />
-      <polyline points={line} fill="none" className="stroke-primary" strokeWidth={1.5} strokeLinejoin="round" />
+      <polygon points={area} className="fill-brand/10" />
+      <polyline points={line} fill="none" className="stroke-brand" strokeWidth={1.5} strokeLinejoin="round" />
     </svg>
   )
 }
@@ -259,7 +259,7 @@ function TrendCard({
   return (
     <Card className="gap-2 py-4">
       <CardHeader className="px-4 pb-0">
-        <CardTitle className="flex items-center justify-between text-xs font-medium text-muted-foreground">
+        <CardTitle className="flex items-center justify-between font-mono text-label text-muted-foreground uppercase">
           <span className="flex items-center gap-1.5">
             <Icon className="size-3.5" />
             {label}
@@ -550,9 +550,7 @@ function SpacesPanel({ spaces }: { spaces: AdminSpace[] }) {
               <TableCell className="font-medium">{s.name}</TableCell>
               <TableCell className="font-mono text-xs text-muted-foreground">/{s.slug}</TableCell>
               <TableCell>
-                <Badge variant={s.type === 'group' ? 'secondary' : 'outline'} className="capitalize">
-                  {s.type}
-                </Badge>
+                <Badge variant={s.type === 'group' ? 'secondary' : 'outline'}>{s.type}</Badge>
               </TableCell>
               <TableCell className="text-muted-foreground">{s.memberCount}</TableCell>
               <TableCell className="text-muted-foreground">{formatDate(s.createdAt)}</TableCell>
@@ -652,7 +650,7 @@ export function Component() {
 
   return (
     <div className="space-y-8">
-      <PageHeader title="Admin" description={description} />
+      <PageHeader eyebrow="admin" title="Admin" description={description} />
 
       <Tabs value={tab} onValueChange={onTabChange} className="space-y-6">
         <TabsList>

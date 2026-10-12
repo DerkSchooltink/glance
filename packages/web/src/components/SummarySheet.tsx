@@ -52,7 +52,7 @@ function PendingBody({ label, dimmed = false }: { label: string; dimmed?: boolea
 
 function SummaryBadge({ snapshot }: { snapshot: ReadySnapshot }) {
   return (
-    <span className="inline-flex rounded-full border bg-muted/50 px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
+    <span className="inline-flex rounded-sm border bg-secondary px-2 py-0.5 font-mono text-[10px] text-muted-foreground uppercase tracking-[0.08em]">
       [AI · v{snapshot.meta.forVersion}]
     </span>
   )
@@ -78,7 +78,7 @@ function SummaryBody({ state }: { state: SummaryState }) {
       return (
         <div className="space-y-4">
           {state.snapshot.stale && (
-            <div className="rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-amber-800 text-sm dark:text-amber-300">
+            <div className="rounded-md border border-warning/40 bg-warning/[0.12] px-3 py-2 text-sm text-warning">
               ⚠ Written for v{state.snapshot.meta.forVersion} — site is v{state.snapshot.currentVersion}
             </div>
           )}
@@ -197,7 +197,7 @@ export function SummarySheet({ spaceSlug, siteSlug, open, onOpenChange, onGenera
         <MountSensor onMount={loadOnMount} />
         <SheetHeader className="border-b px-5 py-4">
           <SheetTitle className="flex items-center gap-2">
-            <Sparkles className="size-4 text-primary" />
+            <Sparkles className="size-4 text-brand-text" />
             Summary
           </SheetTitle>
           <SheetDescription className="sr-only">AI-generated summary of the site entry page.</SheetDescription>

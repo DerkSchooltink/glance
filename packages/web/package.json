@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@plivo/tokens": "github:plivo/design-tokens#8f0e3ba8c22df6ec833cdf59865126d8720f8e84",
     "@tailwindcss/vite": "^4.3.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

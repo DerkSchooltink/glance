@@ -118,7 +118,7 @@ export function ThreadCard({
           <button
             type="button"
             onClick={() => onFocusAnchor(thread)}
-            className="line-clamp-2 border-primary/40 border-l-2 pl-2 text-left text-muted-foreground text-xs italic hover:text-foreground"
+            className="line-clamp-2 border-border-strong border-l-2 pl-2 text-left text-muted-foreground text-xs italic hover:text-foreground"
           >
             “{thread.quote}”
           </button>
@@ -127,7 +127,7 @@ export function ThreadCard({
           // the page (paintAnchors, lib/comments.ts) and has nothing to focus, so this is a static
           // marker, not a button — but it's chip-weight like AnchorChip so the card doesn't read as
           // an anchorless orphan beside anchored ones (#112).
-          <span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 font-medium text-muted-foreground text-xs">
+          <span className="inline-flex items-center gap-1 rounded-sm bg-secondary px-1.5 py-0.5 font-mono text-label text-muted-foreground uppercase">
             <FileText className="size-3" />
             Page
           </span>
@@ -167,7 +167,7 @@ export function ThreadCard({
           // Still worth a row on a follow-up: both say something about THAT message, not its author.
           const meta = head || (!c.deleted && (c.hasAudio || !!c.editedAt))
           return (
-            <li key={c.id} className="group/msg relative rounded-md py-0.5 text-sm hover:bg-muted/40">
+            <li key={c.id} className="group/msg relative rounded-md py-0.5 text-sm hover:bg-surface">
               {/* Rest state is empty: opacity, never `hidden`, so the controls stay in the
                   accessibility tree and stay tab-reachable — focus-within brings them up for anyone
                   not using a mouse.
@@ -176,7 +176,7 @@ export function ThreadCard({
                   would be unreachable. Where there is no hover, it is simply always on — the same
                   deal touch users get today, minus the desktop clutter. */}
               {!c.deleted && (
-                <div className="absolute -top-2 right-1 z-10 flex items-center gap-0.5 rounded-md border bg-popover p-0.5 opacity-0 shadow-sm transition-opacity focus-within:opacity-100 group-hover/msg:opacity-100 [@media(hover:none)]:opacity-100">
+                <div className="absolute -top-2 right-1 z-10 flex items-center gap-0.5 rounded-md border bg-popover p-0.5 opacity-0 shadow-sh1 transition-opacity focus-within:opacity-100 group-hover/msg:opacity-100 [@media(hover:none)]:opacity-100">
                   {/* rounded-sm, not the default `rounded`: the bar's own corner is rounded-md and
                       it holds its buttons 2px in, so a flat 4px child reads as a square in a round
                       box. The scale's next step down is what CONCENTRIC corners want here. */}
@@ -274,7 +274,7 @@ export function ThreadCard({
                       from the auth-gated audio route (deleted comments lose hasAudio, so they never
                       reach here). */}
                   {c.hasAudio && !c.deleted && (
-                    <div className="mt-1.5 rounded-md border bg-muted/40 px-2.5 py-1.5">
+                    <div className="mt-1.5 rounded-md border bg-surface px-2.5 py-1.5">
                       <AudioPlayer
                         compact
                         src={`/api/sites/${site.spaceSlug}/${site.siteSlug}/comments/audio/${c.id}`}
@@ -303,10 +303,10 @@ export function ThreadCard({
                                   aria-label={`${r.emoji} ${r.count}`}
                                   onClick={toggle(c, r.emoji, r.mine)}
                                   className={cn(
-                                    'flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-xs transition-colors',
+                                    'flex items-center gap-1 rounded-sm border px-1.5 py-0.5 text-xs transition-colors',
                                     r.mine
-                                      ? 'border-primary/40 bg-primary/10 text-foreground'
-                                      : 'border-transparent bg-muted text-muted-foreground hover:bg-muted/70',
+                                      ? 'border-brand/40 bg-brand/10 text-foreground'
+                                      : 'border-transparent bg-secondary text-muted-foreground hover:bg-accent',
                                   )}
                                 >
                                   {r.emoji}

@@ -31,7 +31,7 @@ export function UserAvatar({
   return (
     <Avatar className={cn('size-6', className)}>
       {userId && <AvatarImage src={`/api/avatars/${userId}`} alt="" loading="lazy" />}
-      <AvatarFallback className={cn('bg-primary/15 font-semibold text-[0.65rem] text-primary', fallbackClassName)}>
+      <AvatarFallback className={cn('bg-secondary font-semibold text-[0.65rem] text-foreground', fallbackClassName)}>
         {initialsOf(name, email)}
       </AvatarFallback>
     </Avatar>

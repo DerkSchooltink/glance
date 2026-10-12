@@ -179,7 +179,7 @@ export function ApiKeyDialog({
                 secret's min-content width (the string never wraps) and pushes Copy past the dialog
                 edge. Shrinking below that is what lets the `truncate` below actually engage. */}
             <div className="flex min-w-0 items-center gap-2">
-              <code className="flex-1 truncate rounded-md border bg-muted px-3 py-2 font-mono text-sm">
+              <code className="flex-1 truncate rounded-md border bg-code px-3 py-2 font-mono text-code-foreground text-sm">
                 {minted.secret}
               </code>
               <CopySecretButton secret={minted.secret} />

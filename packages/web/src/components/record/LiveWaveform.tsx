@@ -73,7 +73,7 @@ export function LiveWaveform({
         <span
           // biome-ignore lint/suspicious/noArrayIndexKey: fixed-length decorative bar list
           key={i}
-          className="w-1.5 origin-center rounded-full bg-primary/70 transition-transform duration-75"
+          className="w-1.5 origin-center rounded-full bg-brand/70 transition-transform duration-75"
           style={{ height: '100%', transform: `scaleY(${Math.max(0.06, level).toFixed(3)})` }}
         />
       ))}
