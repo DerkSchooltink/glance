@@ -15,10 +15,12 @@ import { DeployCard } from '@/components/DeployCard'
 import { GettingStarted } from '@/components/GettingStarted'
 import { RecordDialog } from '@/components/record/RecordDialog'
 import {
-  CopyActions,
+  actionsColumn,
+  CopyOpenActions,
   feedColumns,
   starColumn,
   nameColumn,
+  OpenLinkButton,
   updatedColumn,
   urlColumn,
   visibilityBadgeColumn,
@@ -128,7 +130,7 @@ function useSetTabParam(staleTab: boolean): (t: TabId) => void {
 
 // The read-only feed table — same shell as Your sites, minus the owner-only actions. Shared by
 // the Shared-with-me and Starred tabs; neither owns the rows, so neither gets owner actions.
-const FEED_COLUMNS = feedColumns<SiteSummary>((s) => <CopyActions url={s.url} />)
+const FEED_COLUMNS = feedColumns<SiteSummary>((s) => <CopyOpenActions url={s.url} />)
 
 function FeedSitesTable({ sites }: { sites: SiteSummary[] }) {
   return (
@@ -353,12 +355,15 @@ function ToolbarSkeleton() {
   // Mirror DashboardToolbar's slim row (heading + subtitle on the left, New button on the right)
   // so the fallback doesn't reflow when the real toolbar streams in.
   return (
-    <div className="flex items-end justify-between gap-4" aria-hidden>
-      <div className="space-y-2">
-        <Skeleton className="h-7 w-40" />
-        <Skeleton className="h-4 w-72" />
+    <div className="flex flex-col gap-4" aria-hidden>
+      <Skeleton className="h-3.5 w-full" />
+      <div className="flex items-end justify-between gap-4">
+        <div className="space-y-2">
+          <Skeleton className="h-7 w-40" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <Skeleton className="h-9 w-24" />
       </div>
-      <Skeleton className="h-9 w-24" />
     </div>
   )
 }
@@ -404,6 +409,7 @@ const TEAM_COLUMNS: Column<TeamUpload>[] = [
     ),
   },
   updatedColumn('when', 'Updated'),
+  actionsColumn((u) => <OpenLinkButton url={u.url} />),
 ]
 
 function TeamActivityTable({ team }: { team: TeamUpload[] }) {
@@ -496,6 +502,7 @@ function CommentsFeed({ comments }: { comments: CommentFeedItem[] }) {
 function DashboardToolbar({ spaces }: { spaces: SpaceSummary[] }) {
   return (
     <PageHeader
+      eyebrow="dashboard"
       title="Your work"
       description="Record a note or drop a folder — everyone gets a URL."
     >
@@ -664,6 +671,11 @@ const SPACE_COLUMNS: Column<SpaceSummary>[] = [
     compare: (a, b) => a.slug.localeCompare(b.slug),
     render: (s) => <span className="font-mono text-sm text-muted-foreground">/{s.slug}</span>,
   },
+  actionsColumn((s) => (
+    <Button asChild variant="outline" size="sm">
+      <Link to={`/${s.slug}`}>Open</Link>
+    </Button>
+  )),
 ]
 
 function SpacesTable({ spaces }: { spaces: SpaceSummary[] }) {
