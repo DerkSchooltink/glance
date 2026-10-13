@@ -11,6 +11,7 @@ import {
   createdColumn,
   nameColumn,
   starColumn,
+  OpenLinkButton,
   urlColumn,
   visibilityColumn,
 } from '@/components/siteColumns'
@@ -112,6 +113,7 @@ function OwnerActions({ site }: { site: SiteSummary }) {
 
   return (
     <div className="flex items-center justify-end gap-1">
+      <OpenLinkButton url={site.url} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" aria-label="More actions">
