@@ -6,7 +6,7 @@ import { api } from '@/lib/api'
 import { toggleTheme, useTheme } from '@/components/theme'
 import { CommandPalette } from '@/components/CommandPalette'
 import { HelpButton } from '@/components/HelpButton'
-import { BrandMark } from '@/components/states'
+import { BrandMark, ByPlivo } from '@/components/states'
 import { NotificationsBell } from '@/components/NotificationsBell'
 import { WhatsNewButton } from '@/components/WhatsNewButton'
 import { UserAvatar } from '@/components/UserAvatar'
@@ -50,18 +50,24 @@ export function AppShell() {
   }
 
   return (
-    <div ref={bindHotkeys} className="bp-app-bg min-h-screen">
+    <div ref={bindHotkeys} className="pl-app-bg min-h-screen">
       <div
         className={cn(
-          'fixed inset-x-0 top-0 z-50 h-0.5 bg-primary transition-opacity duration-300',
+          'fixed inset-x-0 top-0 z-50 h-0.5 bg-brand transition-opacity duration-300',
           nav.state !== 'idle' ? 'animate-pulse opacity-100' : 'opacity-0',
         )}
       />
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4 sm:px-6">
-          <Link to="/dashboard" className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight">
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-2 font-display font-semibold text-[15px] tracking-[-0.02em]"
+          >
             <BrandMark />
-            glance
+            <span className="flex items-baseline gap-1.5">
+              glance
+              <ByPlivo className="hidden sm:inline" />
+            </span>
           </Link>
           {user && (
             <nav className="ml-2 hidden items-center gap-1 sm:flex">
@@ -70,10 +76,11 @@ export function AppShell() {
             </nav>
           )}
           <div className="ml-auto flex items-center gap-1.5">
+            {/* Reads as a search field, not a CTA: no blue convergence, just a firmer hairline. */}
             <Button
               variant="outline"
               size="sm"
-              className="gap-2 text-muted-foreground"
+              className="gap-2 font-sans text-muted-foreground text-sm normal-case tracking-normal hover:border-border-strong hover:bg-background hover:text-foreground"
               onClick={() => setCmdOpen(true)}
             >
               <Command className="size-3.5" />
@@ -149,9 +156,7 @@ function NavItem({ to, children }: { to: string; children: React.ReactNode }) {
       className={({ isActive }) =>
         cn(
           'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-          isActive
-            ? 'bg-muted text-foreground'
-            : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground',
+          isActive ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
         )
       }
     >

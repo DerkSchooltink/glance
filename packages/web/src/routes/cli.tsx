@@ -51,7 +51,7 @@ export function Component() {
   return (
     <Card className="mx-auto mt-[8vh] max-w-md">
       <CardHeader>
-        <div className="flex size-11 items-center justify-center rounded-lg border border-border bg-muted text-primary">
+        <div className="flex size-11 items-center justify-center rounded border bg-background text-foreground">
           {isDone ? (
             <Plug className="size-5" aria-hidden />
           ) : (

@@ -24,12 +24,12 @@ export function VoiceButton({
       onClick={live ? onStop : onStart}
       aria-label={live ? 'Stop recording' : 'Start recording'}
       className={cn(
-        'relative flex size-20 items-center justify-center rounded-full text-primary-foreground shadow-lg outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50',
-        live ? 'bg-destructive hover:bg-destructive/90' : 'bg-primary hover:bg-primary/90',
+        'relative flex size-20 items-center justify-center rounded text-brand-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50',
+        live ? 'bg-destructive hover:bg-destructive/90' : 'bg-brand hover:bg-brand/90',
       )}
     >
       {state === 'recording' && (
-        <span className="absolute inset-0 animate-ping rounded-full bg-destructive/40" aria-hidden />
+        <span className="absolute inset-0 animate-ping rounded bg-destructive/40" aria-hidden />
       )}
       {live ? <Square className="relative size-7 fill-current" /> : <Mic className="relative size-8" />}
     </button>

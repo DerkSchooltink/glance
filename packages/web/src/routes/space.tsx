@@ -184,12 +184,11 @@ export function Component() {
   return (
     <div className="space-y-8">
       <PageHeader
+        eyebrow={isGroup ? 'group space' : 'personal space'}
         title={space.name}
         description={
           <span className="flex flex-wrap items-center gap-2">
-            <Badge variant={isGroup ? 'default' : 'secondary'} className="capitalize">
-              {space.type}
-            </Badge>
+            <Badge variant={isGroup ? 'default' : 'secondary'}>{space.type}</Badge>
             <span>
               {space.memberCount} member{space.memberCount === 1 ? '' : 's'}
             </span>

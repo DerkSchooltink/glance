@@ -4,6 +4,7 @@ import { api, ApiError } from '../lib/api'
 import { safeNext } from '../lib/nav'
 import type { Me, PublicConfig } from '../lib/types'
 import { CopyButton } from '@/components/CopyButton'
+import { BrandMark, ByPlivo, Eyebrow } from '@/components/states'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import '@/tailwind.css'
@@ -90,144 +91,123 @@ export function Component() {
   const terminal = terminalSteps(installCmd, host)
 
   return (
-    <div className="dark relative min-h-screen w-full overflow-hidden bg-[#070b16] font-sans text-foreground antialiased">
-      {/* blueprint drafting grid: hairlines every 28px, brighter major lines every 4th cell,
-          over a faint overhead-light gradient — pure CSS, no canvas */}
+    <div className="relative min-h-screen w-full overflow-hidden bg-background text-foreground antialiased">
+      {/* plivo.com texture: a fine dotted grid that fades out from the top, never a colour wash */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background: [
-            'repeating-linear-gradient(0deg, rgba(96,150,220,0.13) 0 1px, transparent 1px 112px)',
-            'repeating-linear-gradient(90deg, rgba(96,150,220,0.13) 0 1px, transparent 1px 112px)',
-            'repeating-linear-gradient(0deg, rgba(86,130,196,0.06) 0 1px, transparent 1px 28px)',
-            'repeating-linear-gradient(90deg, rgba(86,130,196,0.06) 0 1px, transparent 1px 28px)',
-            'linear-gradient(#0b1224, #070b16)',
-          ].join(', '),
-        }}
-      />
-      {/* vignette: top light + bottom shade to seat the grid and lift the content */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background:
-            'radial-gradient(120% 90% at 50% -10%, rgba(86,130,196,0.12), transparent 55%), radial-gradient(90% 90% at 50% 115%, rgba(0,0,0,0.6), transparent 60%)',
-        }}
+        className="pl-dot-grid pointer-events-none absolute inset-0 z-0 opacity-40 [mask-image:radial-gradient(90%_70%_at_50%_0%,#000_35%,transparent_80%)]"
       />
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-7 sm:px-8">
-        <header className="bp-rise flex items-center justify-between">
-          <div className="flex items-center gap-2.5 font-mono text-sm font-semibold tracking-tight">
-            <span className="inline-block size-2.5 rounded-[3px] bg-primary shadow-[0_0_14px_2px_rgba(245,158,11,0.5)]" />
-            glance
+        <header className="pl-reveal flex items-center justify-between">
+          <div className="flex items-center gap-2.5 font-display font-semibold text-[15px] tracking-[-0.02em]">
+            <BrandMark />
+            <span className="flex items-baseline gap-1.5">
+              glance
+              <ByPlivo />
+            </span>
           </div>
-          <div className="flex items-center gap-4 font-mono text-xs">
+          <div className="flex items-center gap-5 text-kicker text-muted-foreground">
             <a
               href={REPO_URL}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+              className="flex items-center gap-1.5 transition-colors hover:text-foreground"
             >
               <GithubGlyph />
               GitHub
             </a>
-            <span className="text-muted-foreground">self-hosted</span>
+            <span>self-hosted</span>
           </div>
         </header>
 
-        <main className="grid flex-1 items-center gap-12 py-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-          {/* pitch */}
-          <div>
-            <div className="bp-rise font-mono text-sm" style={{ animationDelay: '60ms' }}>
-              <span className="text-muted-foreground">~/work $</span>{' '}
-              <span className="text-primary">glance</span>
+        <main className="grid flex-1 items-center gap-12 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+          {/* pitch, inside TechFrame-style bracket corners */}
+          <div className="relative">
+            <FrameCorners />
+            <div className="pl-reveal flex" style={{ animationDelay: '95ms' }}>
+              <Eyebrow index="~" meta="MIT">
+                work $ glance
+              </Eyebrow>
             </div>
-            <h1
-              className="bp-rise mt-5 font-mono text-5xl font-semibold leading-[1.04] tracking-tight [text-shadow:0_2px_30px_rgba(7,11,22,0.85)] sm:text-6xl"
-              style={{ animationDelay: '120ms' }}
-            >
-              Artifacts
+            <h1 className="pl-reveal mt-6 text-display" style={{ animationDelay: '190ms' }}>
+              Artifacts for
               <br />
-              for every
-              <br />
-              <span className="text-primary">agent.</span>
+              every agent.
             </h1>
             <p
-              className="bp-rise mt-6 max-w-md text-base leading-relaxed text-muted-foreground"
-              style={{ animationDelay: '200ms' }}
+              className="pl-reveal mt-6 max-w-md text-body-lg text-muted-foreground"
+              style={{ animationDelay: '285ms' }}
             >
-              An open-source alternative to Claude Artifacts. Any agent ships a self-contained page
-              or app to a live URL — then you review it in the browser and it fixes itself. No
-              bundler, no Docker, no deploy pipeline to babysit.
+              An open-source alternative to Claude Artifacts. Any agent ships a self-contained page or app to a live URL
+              — then you review it in the browser and it fixes itself. No bundler, no Docker, no deploy pipeline to
+              babysit.
             </p>
 
+            {/* spec grid: 1px hairline gaps over the border colour, mono index per cell */}
             <ul
-              className="bp-rise mt-9 grid gap-x-8 gap-y-5 sm:grid-cols-2"
-              style={{ animationDelay: '280ms' }}
+              className="pl-reveal mt-10 grid gap-px overflow-hidden rounded border bg-border sm:grid-cols-2"
+              style={{ animationDelay: '380ms' }}
             >
               {FEATURES.map((f, i) => (
-                <li key={f.label} className="flex gap-3">
-                  <span className="mt-0.5 font-mono text-xs tabular-nums text-primary">
-                    {String(i + 1).padStart(2, '0')}
+                <li key={f.label} className="flex flex-col gap-1.5 bg-background p-4">
+                  <span className="text-kicker text-foreground/70 tabular-nums">
+                    [{String(i + 1).padStart(2, '0')}]
                   </span>
-                  <div>
-                    <div className="font-mono text-[13px] font-medium text-foreground">{f.label}</div>
-                    <div className="mt-1 text-[13px] leading-snug text-muted-foreground">
-                      {f.detail}
-                    </div>
-                  </div>
+                  <span className="font-medium text-foreground text-sm">{f.label}</span>
+                  <span className="text-muted-foreground text-s-400">{f.detail}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* terminal + auth */}
-          <div className="bp-rise flex flex-col gap-5" style={{ animationDelay: '360ms' }}>
-            <div className="overflow-hidden rounded-xl border border-white/10 bg-[#0a1120]/80 shadow-2xl backdrop-blur-sm">
-              <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5">
-                <span className="size-3 rounded-full bg-white/15" />
-                <span className="size-3 rounded-full bg-white/15" />
-                <span className="size-3 rounded-full bg-white/15" />
-                <span className="ml-2 font-mono text-xs text-muted-foreground">glance — zsh</span>
+          <div className="pl-reveal flex flex-col gap-5" style={{ animationDelay: '475ms' }}>
+            <div className="overflow-hidden rounded border bg-surface">
+              <div className="flex items-center gap-2 border-b px-4 py-2.5">
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand opacity-60 motion-reduce:animate-none" />
+                  <span className="relative inline-flex size-2 rounded-full bg-brand" />
+                </span>
+                <span className="ml-1 font-mono text-muted-foreground text-xs">glance — zsh</span>
                 <CopyButton
                   text={installCmd}
                   label="copy install"
                   copiedMessage="Install command copied"
                   variant="ghost"
                   size="sm"
-                  className="ml-auto h-7 gap-1.5 px-2 font-mono text-[11px] text-muted-foreground hover:text-foreground [&_svg]:size-3"
+                  className="ml-auto h-7 gap-1.5 px-2 text-muted-foreground hover:text-foreground [&_svg]:size-3"
                 />
               </div>
-              <div className="space-y-3 p-4 font-mono text-[12.5px] leading-relaxed">
+              <div className="space-y-3 bg-code p-4 font-mono text-[12.5px] text-code-foreground leading-relaxed">
                 {terminal.map((line) => (
                   <div key={line.prompt}>
                     <div className="flex gap-2">
-                      <span className="shrink-0 select-none text-primary">$</span>
-                      <span className="break-all text-foreground/90">{line.prompt}</span>
+                      <span className="shrink-0 select-none text-muted-foreground">$</span>
+                      <span className="break-all">{line.prompt}</span>
                     </div>
                     <div className="mt-1 break-all pl-4 text-muted-foreground">{line.output}</div>
                   </div>
                 ))}
                 <div className="flex gap-2">
-                  <span className="shrink-0 select-none text-primary">$</span>
-                  <span className="bp-caret text-foreground/70" />
+                  <span className="shrink-0 select-none text-muted-foreground">$</span>
+                  <span className="pl-caret text-foreground/70" />
                 </div>
               </div>
             </div>
 
-            <div className="rounded-xl border border-white/10 bg-card/70 p-6 backdrop-blur-sm">
+            <div className="rounded border bg-card p-6">
               {error && <ErrorBanner className="mb-4">{ERRORS[error] ?? 'Sign-in error.'}</ErrorBanner>}
               {googleEnabled && (
                 <Button
                   size="lg"
-                  className="h-12 w-full gap-3 text-[15px] font-medium"
+                  className="h-11 w-full gap-3"
                   onClick={() => {
                     const qs = next ? `?next=${encodeURIComponent(next)}` : ''
                     window.location.href = `/api/auth/google${qs}`
                   }}
                 >
-                  <span className="flex size-6 items-center justify-center rounded bg-white">
+                  <span className="flex size-6 items-center justify-center rounded-sm bg-white">
                     <GoogleGlyph />
                   </span>
                   Sign in with Google
@@ -239,7 +219,7 @@ export function Component() {
               {import.meta.env.DEV && (
                 <Button
                   variant="outline"
-                  className="mt-3 h-10 w-full font-mono text-xs"
+                  className="mt-3 h-10 w-full"
                   disabled={busy}
                   onClick={async () => {
                     setBusy(true)
@@ -253,12 +233,12 @@ export function Component() {
               )}
 
               {!hasAnyMethod && (
-                <p className="text-center text-sm text-muted-foreground">
+                <p className="text-center text-muted-foreground text-sm">
                   No sign-in method is configured yet. Ask an administrator to finish setup.
                 </p>
               )}
 
-              <p className="mt-4 text-center text-xs text-muted-foreground">
+              <p className="mt-4 text-center text-muted-foreground text-xs">
                 {googleEnabled
                   ? 'Approved Google Workspace accounts only · sessions expire after 24h'
                   : 'Sessions expire after 24h'}
@@ -268,8 +248,8 @@ export function Component() {
         </main>
 
         <footer
-          className="bp-rise flex items-center justify-between font-mono text-xs text-muted-foreground"
-          style={{ animationDelay: '440ms' }}
+          className="pl-reveal flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-kicker text-muted-foreground"
+          style={{ animationDelay: '570ms' }}
         >
           <span>$0/month · Workers + R2 + D1 + KV</span>
           <a
@@ -287,11 +267,25 @@ export function Component() {
   )
 }
 
+// TechFrame-style L-bracket corners (plivo.com's precision frame), in currentColor at low opacity.
+// Decorative: hidden below 640px so small screens stay clean.
+function FrameCorners() {
+  const corner = 'absolute size-3 border-foreground/25'
+  return (
+    <div aria-hidden className="pointer-events-none absolute -inset-6 hidden sm:block">
+      <span className={`${corner} top-0 left-0 border-t border-l`} />
+      <span className={`${corner} top-0 right-0 border-t border-r`} />
+      <span className={`${corner} bottom-0 left-0 border-b border-l`} />
+      <span className={`${corner} right-0 bottom-0 border-r border-b`} />
+    </div>
+  )
+}
+
 // Shared destructive message banner (sign-in errors + setup errors).
 function ErrorBanner({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
     <div
-      className={`rounded-lg border border-destructive/40 bg-destructive/15 px-3.5 py-2.5 text-sm text-destructive${
+      className={`rounded border border-destructive/40 bg-destructive/[0.12] px-3.5 py-2.5 text-destructive text-sm${
         className ? ` ${className}` : ''
       }`}
     >
@@ -323,7 +317,7 @@ function SetupPanel({ next, withDivider }: { next: string | null; withDivider: b
   }
 
   return (
-    <form onSubmit={submit} className={withDivider ? 'mt-5 border-t border-white/10 pt-5' : undefined}>
+    <form onSubmit={submit} className={withDivider ? 'mt-5 border-t pt-5' : undefined}>
       <p className="mb-3 text-sm text-muted-foreground">
         First run? Enter the setup token printed by the deploy to claim the admin account.
       </p>
@@ -357,7 +351,7 @@ function GithubGlyph() {
   )
 }
 
-// Official Google "G", set on a white tile so it reads cleanly on the amber CTA.
+// Official Google "G", set on a white tile so it reads cleanly on the ink (and hover-blue) CTA.
 function GoogleGlyph() {
   return (
     <svg viewBox="0 0 24 24" className="size-4" aria-hidden>

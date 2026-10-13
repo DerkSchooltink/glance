@@ -222,7 +222,7 @@ export function Composer({
   if (recording || recorded) {
     return (
       <div className={cn('flex flex-col gap-2', className)}>
-        <div className="flex items-center gap-3 rounded-md border border-input bg-muted/40 px-3 py-2">
+        <div className="flex items-center gap-3 rounded-md border border-input bg-surface px-3 py-2">
           <span
             className={cn(
               'size-2 shrink-0 rounded-full',
@@ -276,10 +276,10 @@ export function Composer({
           }}
           placeholder={placeholder}
           rows={3}
-          className="w-full resize-y rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none placeholder:text-muted-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          className="w-full resize-y rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         />
         {menuOpen && (
-          <ul className="absolute z-20 mt-1 max-h-56 w-full overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md">
+          <ul className="absolute z-20 mt-1 max-h-56 w-full overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-sh1">
             {candidates.map((u, i) => (
               <li key={u.id}>
                 <button

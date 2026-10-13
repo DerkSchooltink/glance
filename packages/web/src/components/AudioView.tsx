@@ -17,8 +17,8 @@ export function AudioView({
 }) {
   return (
     <div className="flex size-full items-center justify-center p-6">
-      <div className="flex w-full max-w-md flex-col items-center gap-4 rounded-xl border bg-card p-8 text-card-foreground shadow-sm">
-        <div className="flex size-16 items-center justify-center rounded-full bg-muted text-muted-foreground">
+      <div className="flex w-full max-w-md flex-col items-center gap-4 rounded border bg-card p-8 text-card-foreground">
+        <div className="flex size-16 items-center justify-center rounded border bg-background text-muted-foreground">
           <Music className="size-7" />
         </div>
         <p className="w-full truncate text-center font-medium text-sm" title={fileName}>

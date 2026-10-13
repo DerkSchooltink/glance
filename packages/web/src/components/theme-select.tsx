@@ -147,7 +147,7 @@ export function ThemeMenu({
           <button
             type="button"
             disabled={disabled}
-            className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 font-medium text-muted-foreground text-xs transition-opacity hover:opacity-80 disabled:opacity-50"
+            className="inline-flex items-center gap-1 rounded-sm bg-secondary px-2 py-0.5 font-mono text-label text-muted-foreground uppercase transition-colors hover:bg-accent disabled:opacity-50"
           >
             <Palette className="size-3" />
             {label}

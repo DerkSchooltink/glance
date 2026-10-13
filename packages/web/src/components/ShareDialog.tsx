@@ -283,7 +283,7 @@ export function PickerRow({
       <span
         className={cn(
           'flex size-4 shrink-0 items-center justify-center rounded border',
-          checked ? 'border-primary bg-primary text-primary-foreground' : 'border-input',
+          checked ? 'border-brand bg-brand text-brand-foreground' : 'border-input',
         )}
       >
         {checked && <Check className="size-3" />}

@@ -23,6 +23,7 @@ license; the most significant are listed below. Run `bun pm ls` for the full res
 | lucide-react | ISC |
 | sonner | MIT |
 | tailwindcss | MIT |
+| @plivo/tokens (Plivo design tokens) | MIT |
 
 ## Tooling
 

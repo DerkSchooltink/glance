@@ -30,7 +30,7 @@ function SparkButton({ unread, ...props }: { unread: number } & React.ComponentP
     <Button variant="ghost" size="icon" className="relative" aria-label="What's New" {...props}>
       <Sparkles className="size-4" />
       {unread > 0 && (
-        <span className="-right-0.5 -top-0.5 absolute size-2 rounded-full bg-primary ring-2 ring-background" />
+        <span className="-right-0.5 -top-0.5 absolute size-2 rounded-full bg-brand ring-2 ring-background" />
       )}
     </Button>
   )
@@ -84,7 +84,7 @@ function WhatsNewDialog({
       <DialogContent className="flex max-h-[85vh] flex-col gap-0 p-0 sm:max-w-lg">
         <DialogHeader className="border-b px-6 py-4">
           <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="size-4 text-primary" />
+            <Sparkles className="size-4 text-brand-text" />
             What's New
           </DialogTitle>
           <DialogDescription>
@@ -103,7 +103,7 @@ function WhatsNewDialog({
           </ul>
         </div>
         <div className="flex items-center justify-between gap-3 border-t px-6 py-3">
-          <Link to="/whats-new" className="font-medium text-primary text-sm hover:underline" onClick={onDismiss}>
+          <Link to="/whats-new" className="font-medium text-brand-text text-sm hover:underline" onClick={onDismiss}>
             View all release notes
           </Link>
           <DialogClose asChild>
@@ -124,7 +124,7 @@ function WhatsNewSheet({ data, onOpen }: { data: WhatsNewList; onOpen: () => voi
       <SheetContent side="right" className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
         <SheetHeader className="border-b px-5 py-4">
           <SheetTitle className="flex items-center gap-2">
-            <Sparkles className="size-4 text-primary" />
+            <Sparkles className="size-4 text-brand-text" />
             What's New
           </SheetTitle>
           <SheetDescription className="sr-only">Recent Glance product updates and release notes.</SheetDescription>
@@ -143,7 +143,7 @@ function WhatsNewSheet({ data, onOpen }: { data: WhatsNewList; onOpen: () => voi
           )}
         </div>
         <div className="border-t px-5 py-3 text-center">
-          <Link to="/whats-new" className="font-medium text-primary text-sm hover:underline">
+          <Link to="/whats-new" className="font-medium text-brand-text text-sm hover:underline">
             View all release notes
           </Link>
         </div>
@@ -158,7 +158,7 @@ function ReleaseEntry({ release }: { release: Release }) {
       {release.image && <ReleaseImage src={release.image} />}
       <div className="flex items-center gap-2">
         {release.featured && (
-          <span className="rounded-full bg-primary/10 px-2 py-0.5 font-medium text-[10px] text-primary uppercase tracking-wide">
+          <span className="rounded-sm bg-brand/10 px-1.5 py-0.5 font-mono text-[10px] text-brand-text uppercase tracking-[0.08em]">
             Featured
           </span>
         )}

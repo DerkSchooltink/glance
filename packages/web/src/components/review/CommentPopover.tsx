@@ -103,7 +103,7 @@ export function CommentPopover({
             type="button"
             aria-label="Comment on selection"
             onClick={onActivate}
-            className="inline-flex items-center gap-1.5 rounded-md border bg-popover px-2 py-1 font-medium text-popover-foreground text-xs shadow-md hover:bg-accent"
+            className="inline-flex items-center gap-1.5 rounded-md border bg-popover px-2 py-1 font-medium text-popover-foreground text-xs shadow-sh1 hover:bg-accent"
           >
             <MessageSquarePlus className="size-3.5" />
             Comment
@@ -119,7 +119,7 @@ export function CommentPopover({
             type="button"
             aria-label="Ask AI about selection"
             onClick={onAskActivate}
-            className="inline-flex items-center gap-1.5 rounded-md border bg-popover px-2 py-1 font-medium text-popover-foreground text-xs shadow-md hover:bg-accent"
+            className="inline-flex items-center gap-1.5 rounded-md border bg-popover px-2 py-1 font-medium text-popover-foreground text-xs shadow-sh1 hover:bg-accent"
           >
             Ask
             <Sparkles className="size-3.5" />
@@ -137,14 +137,14 @@ export function CommentPopover({
           // the reducer means when a click on the chip mints a fresh one over an open (even dirty) box.
           key={composer.id}
           rect={composer.anchor.rect}
-          className="absolute z-30 w-80 rounded-lg border bg-popover p-3 text-popover-foreground shadow-lg"
+          className="absolute z-30 w-80 rounded-lg border bg-popover p-3 text-popover-foreground shadow-sh1"
           // Escape closes the popover — but ONLY once the Composer hasn't already claimed it for its
           // open mention menu (it preventDefaults there). Menu first, popover on the next press.
           onKeyDown={(e) => {
             if (e.key === 'Escape' && !e.defaultPrevented) onDismiss()
           }}
         >
-          <p className="mb-2 line-clamp-2 border-primary/40 border-l-2 pl-2 text-muted-foreground text-xs italic">
+          <p className="mb-2 line-clamp-2 border-border-strong border-l-2 pl-2 text-muted-foreground text-xs italic">
             “{composer.anchor.quote}”
           </p>
           <Composer
@@ -281,13 +281,13 @@ function AskPanel({
     <div
       ref={panelRef}
       style={style}
-      className="absolute z-30 w-80 rounded-lg border bg-popover p-3 text-popover-foreground shadow-lg"
+      className="absolute z-30 w-80 rounded-lg border bg-popover p-3 text-popover-foreground shadow-sh1"
       onKeyDown={(e) => {
         if (e.key === 'Escape') onDismiss()
       }}
     >
       <div className="mb-2 flex items-start gap-2">
-        <p className="line-clamp-2 flex-1 border-primary/40 border-l-2 pl-2 text-muted-foreground text-xs italic">
+        <p className="line-clamp-2 flex-1 border-border-strong border-l-2 pl-2 text-muted-foreground text-xs italic">
           “{ask.anchor.quote}”
         </p>
         {/* The one dismissal that needs no focus and no keyboard: once an answer is on screen the
@@ -312,7 +312,7 @@ function AskPanel({
           stickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 4
         }}
         style={{ maxHeight: 'min(45vh, 320px)' }}
-        className="overflow-y-auto rounded-md border bg-muted/30 px-3 py-2"
+        className="overflow-y-auto rounded-md border bg-surface px-3 py-2"
       >
         {turns.map((turn, i) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: turns are append-only (an errored one is replaced in place); index identity is exactly their identity.
@@ -364,7 +364,7 @@ function AskPanel({
         }}
         placeholder="Ask a follow-up…"
         rows={1}
-        className="mt-2 w-full resize-y rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none placeholder:text-muted-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 read-only:opacity-70"
+        className="mt-2 w-full resize-y rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background read-only:opacity-70"
       />
       <p className="mt-1 text-right text-[10px] text-muted-foreground">AI · not saved</p>
     </div>

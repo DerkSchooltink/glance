@@ -88,7 +88,7 @@ export function AudioScrubber({
         onClick={toggle}
         aria-label={playing ? 'Pause' : 'Play'}
         className={cn(
-          'flex shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary/90 focus-visible:ring-[3px] focus-visible:ring-ring/50',
+          'flex shrink-0 items-center justify-center rounded bg-brand text-brand-foreground outline-none transition-colors hover:bg-brand/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
           compact ? 'size-7' : 'size-9',
         )}
       >
@@ -106,7 +106,7 @@ export function AudioScrubber({
         value={Math.min(current, duration || 0)}
         onChange={seek}
         aria-label="Seek"
-        className="h-1 min-w-0 flex-1 cursor-pointer accent-primary"
+        className="h-1 min-w-0 flex-1 cursor-pointer accent-brand"
       />
       <span className="shrink-0 font-mono text-muted-foreground text-xs tabular-nums">
         {formatTimestamp(current)} / {formatTimestamp(duration)}

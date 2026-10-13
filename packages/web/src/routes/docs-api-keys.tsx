@@ -8,14 +8,14 @@ import { Link } from 'react-router'
 
 function CodeBlock({ children }: { children: string }) {
   return (
-    <pre className="overflow-x-auto rounded-md border bg-muted px-3 py-2 font-mono text-xs">
+    <pre className="overflow-x-auto rounded-md border bg-code px-3 py-2 font-mono text-code-foreground text-xs">
       <code>{children}</code>
     </pre>
   )
 }
 
 function Code({ children }: { children: string }) {
-  return <code className="rounded bg-muted px-1 py-0.5 text-xs">{children}</code>
+  return <code className="rounded bg-code px-1 py-0.5 text-code-foreground text-xs">{children}</code>
 }
 
 // [method, path, what it does, whether a key credential may call it]
@@ -41,7 +41,7 @@ function EndpointTable({ rows }: { rows: [string, string, string, string][] }) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-2">
-      <h2 className="font-semibold text-lg leading-snug">{title}</h2>
+      <h2 className="text-h3-500">{title}</h2>
       <div className="space-y-2 text-muted-foreground text-sm leading-relaxed">{children}</div>
     </section>
   )
@@ -57,15 +57,15 @@ export function Component() {
   return (
     <div className="mx-auto max-w-2xl">
       <div className="mb-8 flex items-center gap-2">
-        <KeyRound className="size-5 text-primary" />
-        <h1 className="font-semibold text-2xl tracking-tight">API Keys</h1>
+        <KeyRound className="size-5 text-muted-foreground" />
+        <h1 className="text-h1-500">API Keys</h1>
       </div>
 
       <div className="space-y-8">
         <Section title="Create a key">
           <p>
             From{' '}
-            <Link to="/settings/keys" className="font-medium text-primary hover:underline">
+            <Link to="/settings/keys" className="font-medium text-brand-text hover:underline">
               /settings/keys
             </Link>
             , click <strong className="text-foreground">New key</strong>. Give it a name, an expiry (1, 7, 30, 90, 180,
@@ -196,7 +196,7 @@ export function Component() {
         <Section title="Expiry &amp; revocation">
           <p>
             A key stops authenticating the moment it expires or is revoked from{' '}
-            <Link to="/settings/keys" className="font-medium text-primary hover:underline">
+            <Link to="/settings/keys" className="font-medium text-brand-text hover:underline">
               /settings/keys
             </Link>
             . Revoked keys stay listed, greyed out, rather than disappearing.

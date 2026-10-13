@@ -242,7 +242,7 @@ export function DeployCard({ spaces }: { spaces: SpaceSummary[] }) {
       />
 
       {staged && !busy && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/30 px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded border bg-surface px-4 py-3">
           <p className="text-sm text-muted-foreground">
             <span className="font-medium text-foreground">
               {staged.length} {staged.length === 1 ? 'file' : 'files'}
@@ -269,7 +269,7 @@ export function DeployCard({ spaces }: { spaces: SpaceSummary[] }) {
         <div className="space-y-2">
           <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
             <div
-              className="h-full rounded-full bg-primary transition-all duration-200"
+              className="h-full rounded-full bg-brand transition-all duration-200"
               style={{ width: `${upload.pct}%` }}
             />
           </div>
@@ -369,7 +369,7 @@ function SlugStatus({
     )
   if (takenByOther) return <span className="font-medium text-destructive">taken by someone else</span>
   if (ownedConflict)
-    return <span className="font-medium text-primary">you already own this — uploading replaces it</span>
+    return <span className="font-medium text-warning">you already own this — uploading replaces it</span>
   if (available) return <span className="font-medium text-success">available</span>
   return null
 }
@@ -398,10 +398,10 @@ function Dropzone({
   const tint = takenByOther
     ? 'border-destructive/50 bg-destructive/5'
     : ownedConflict
-      ? 'border-primary/50 bg-primary/5'
+      ? 'border-brand/50 bg-brand/5'
       : available
         ? 'border-success/50 bg-success/5'
-        : 'border-border bg-muted/30'
+        : 'border-border bg-surface'
 
   // A full-zone overlay <button> is the click target → file picker (the common single/multi-file
   // case); the labels above set pointer-events-none so a click anywhere in the zone falls through
@@ -412,7 +412,7 @@ function Dropzone({
     <div
       className={cn(
         'relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-6 py-12 text-center transition-colors',
-        dragActive ? 'border-primary bg-primary/10' : tint,
+        dragActive ? 'border-brand bg-brand/10' : tint,
         busy && 'pointer-events-none opacity-60',
       )}
       onDragOver={(e) => {
@@ -435,7 +435,7 @@ function Dropzone({
         onClick={onChooseFiles}
         disabled={busy}
       />
-      <div className="pointer-events-none relative flex size-12 items-center justify-center rounded-full bg-background text-muted-foreground shadow-sm">
+      <div className="pointer-events-none relative flex size-12 items-center justify-center rounded border bg-background text-muted-foreground">
         <FolderUp className="size-6" />
       </div>
       <div className="pointer-events-none relative">
@@ -444,7 +444,7 @@ function Dropzone({
           click to choose files, or{' '}
           <button
             type="button"
-            className="pointer-events-auto font-medium text-primary underline-offset-2 hover:underline"
+            className="pointer-events-auto font-medium text-brand-text underline-offset-2 hover:underline"
             onClick={onChooseFolder}
             disabled={busy}
           >

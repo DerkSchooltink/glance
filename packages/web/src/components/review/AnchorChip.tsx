@@ -6,7 +6,7 @@ import { MousePointerSquareDashed } from 'lucide-react'
 export function AnchorChip({ tag, preview }: { tag: string; preview: string }) {
   return (
     <span className="flex items-center gap-1.5 text-muted-foreground text-xs">
-      <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-1.5 py-0.5 font-medium text-primary">
+      <span className="inline-flex items-center gap-1 rounded bg-brand/10 px-1.5 py-0.5 font-medium text-brand-text">
         <MousePointerSquareDashed className="size-3" />
         {tag || 'element'}
       </span>

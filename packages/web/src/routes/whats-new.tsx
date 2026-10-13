@@ -29,8 +29,8 @@ export function Component() {
   return (
     <div className="mx-auto max-w-2xl">
       <div className="mb-8 flex items-center gap-2">
-        <Sparkles className="size-5 text-primary" />
-        <h1 className="font-semibold text-2xl tracking-tight">What's New</h1>
+        <Sparkles className="size-5 text-brand-text" />
+        <h1 className="text-h1-500">What's New</h1>
       </div>
       {data.items.length === 0 ? (
         <p className="py-16 text-center text-muted-foreground text-sm">No release notes yet.</p>
@@ -38,7 +38,7 @@ export function Component() {
         <ol className="space-y-12 border-border/60 border-l pl-6">
           {data.items.map((r) => (
             <li key={r.slug} id={r.slug} className="relative scroll-mt-24">
-              <span className="-left-[1.9rem] absolute top-1.5 size-2.5 rounded-full bg-primary ring-4 ring-background" />
+              <span className="-left-[1.9rem] absolute top-1.5 size-2.5 rounded-full bg-brand ring-4 ring-background" />
               <ArchiveEntry release={r} />
             </li>
           ))}
@@ -54,14 +54,14 @@ function ArchiveEntry({ release }: { release: Release }) {
       {release.image && <ReleaseImage src={release.image} className="mb-4" />}
       <div className="flex items-center gap-2">
         {release.featured && (
-          <span className="rounded-full bg-primary/10 px-2 py-0.5 font-medium text-[10px] text-primary uppercase tracking-wide">
+          <span className="rounded-sm bg-brand/10 px-1.5 py-0.5 font-mono text-[10px] text-brand-text uppercase tracking-[0.08em]">
             Featured
           </span>
         )}
         <time className="font-mono text-muted-foreground text-xs">{formatReleaseDate(release.date, 'long')}</time>
         {release.version && <span className="font-mono text-muted-foreground text-xs">· {release.version}</span>}
       </div>
-      <h2 className="mt-1.5 font-semibold text-lg leading-snug">{release.title}</h2>
+      <h2 className="mt-1.5 text-h3-500">{release.title}</h2>
       {release.subtitle && <p className="mt-0.5 text-muted-foreground">{release.subtitle}</p>}
       <ReleaseBody html={release.bodyHtml} className="mt-3" />
     </article>

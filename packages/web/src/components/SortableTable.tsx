@@ -118,7 +118,7 @@ function SortHead({
       <button
         type="button"
         onClick={onToggle}
-        className="-mx-1 inline-flex items-center gap-1 rounded px-1 font-medium hover:text-foreground/70"
+        className="-mx-1 inline-flex items-center gap-1 rounded px-1 uppercase transition-colors hover:text-foreground"
         aria-label={`Sort by ${label}`}
       >
         {label}

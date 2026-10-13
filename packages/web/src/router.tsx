@@ -37,9 +37,10 @@ function RootError() {
   const info = (status && map[status]) || { title: 'Something went wrong', body: 'Please try again.' }
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <div className="font-mono text-6xl font-semibold text-primary">{status ?? '!'}</div>
-      <h1 className="mt-4 text-xl font-semibold tracking-tight">{info.title}</h1>
-      <p className="mt-1 text-sm text-muted-foreground">{info.body}</p>
+      {/* plivo.com's error page: a small brand label over an ink display headline */}
+      <div className="text-brand-text text-kicker">{status ? `${status} error` : 'error'}</div>
+      <h1 className="mt-4 text-headline">{info.title}</h1>
+      <p className="mt-3 text-muted-foreground">{info.body}</p>
       <Button asChild className="mt-6">
         <Link to="/dashboard">Back to dashboard</Link>
       </Button>
@@ -53,7 +54,7 @@ export type { LoaderFunctionArgs }
 // Split out from the entry file (main.tsx) so a test can assert on route ORDER without importing
 // the createRoot/render side effect. See router.test.ts.
 export const routeConfig: RouteObject[] = [
-  // Login is a standalone, full-bleed route (its own dark Blueprint hero) outside the shell.
+  // Login is a standalone, full-bleed route (its own Plivo hero) outside the shell.
   { path: '/login', lazy: () => import('./routes/login') },
   // Site preview is full-bleed too — a chrome-less, full-screen iframe (opened in a new tab).
   // Lives outside the shell so there's no header/nav; loader 401 → /login, 403/404/410 → RootError.
