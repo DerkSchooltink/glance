@@ -49,7 +49,7 @@ export function Eyebrow({
 export function PageHeader({
   title,
   description,
-  eyebrow,
+  eyebrow = 'work',
   children,
 }: {
   title: React.ReactNode
@@ -59,11 +59,9 @@ export function PageHeader({
 }) {
   return (
     <div className="flex flex-col gap-4">
-      {eyebrow && (
-        <div className="flex">
-          <Eyebrow index="~">{eyebrow}</Eyebrow>
-        </div>
-      )}
+      <div className="flex">
+        <Eyebrow index="~">{eyebrow}</Eyebrow>
+      </div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
           <h1 className="text-h1-500">{title}</h1>

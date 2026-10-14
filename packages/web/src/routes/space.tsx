@@ -4,7 +4,7 @@ import { ExternalLink, Trash2, UserPlus } from 'lucide-react'
 import { toast } from 'sonner'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { PeoplePicker, ShareDialog, toggle } from '@/components/ShareDialog'
-import { CopyActions, feedColumns } from '@/components/siteColumns'
+import { CopyOpenActions, feedColumns } from '@/components/siteColumns'
 import { SortableTable } from '@/components/SortableTable'
 import { EmptyState, PageHeader, SectionHeader, Spinner } from '@/components/states'
 import { Badge } from '@/components/ui/badge'
@@ -136,11 +136,11 @@ function InviteMembersDialog({ slug }: { slug: string }) {
 
 // Same table shell as the dashboard feeds; owners get a Share action on their own rows.
 const SPACE_SITE_COLUMNS = feedColumns<SpaceSite>((s) => (
-  <CopyActions url={s.url}>
+  <CopyOpenActions url={s.url}>
     {s.isOwner && (
       <ShareDialog spaceSlug={s.spaceSlug} siteSlug={s.siteSlug} title={s.title} triggerLabel="Share" />
     )}
-  </CopyActions>
+  </CopyOpenActions>
 ))
 
 function DangerZone({ space }: { space: SpaceDetail }) {
