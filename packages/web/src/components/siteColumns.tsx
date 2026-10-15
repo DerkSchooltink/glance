@@ -62,7 +62,7 @@ export function nameColumn<T extends SiteSummary>(): Column<T> {
         {s.audio && <Mic className="size-3.5 shrink-0 text-muted-foreground" aria-label="Audio" />}
         {s.hasSummary && <Sparkles className="size-3.5 shrink-0 text-muted-foreground" aria-label="Has AI summary" />}
         {/* The name is the row's link, so no separate Open button is needed. */}
-        <a href={s.url} target="_blank" rel="noreferrer" className="truncate font-medium hover:underline">
+        <a href={s.url} target="_blank" rel="noreferrer" title={s.title ?? s.siteSlug} className="truncate font-medium underline-offset-4 hover:underline">
           {s.title ?? s.siteSlug}
         </a>
         {s.status === 'archived' && <Badge variant="secondary">archived</Badge>}
