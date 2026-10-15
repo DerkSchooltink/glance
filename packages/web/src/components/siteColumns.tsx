@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { ExternalLink, Mic, Sparkles, Star } from 'lucide-react'
+import { Mic, Sparkles, Star } from 'lucide-react'
 import { CopyButton } from '@/components/CopyButton'
 import type { Column } from '@/components/SortableTable'
 import { VisibilityBadge } from '@/components/visibility'
@@ -61,7 +61,10 @@ export function nameColumn<T extends SiteSummary>(): Column<T> {
       <div className="flex items-center gap-2">
         {s.audio && <Mic className="size-3.5 shrink-0 text-muted-foreground" aria-label="Audio" />}
         {s.hasSummary && <Sparkles className="size-3.5 shrink-0 text-muted-foreground" aria-label="Has AI summary" />}
-        <span className="truncate font-medium">{s.title ?? s.siteSlug}</span>
+        {/* The name is the row's link, so no separate Open button is needed. */}
+        <a href={s.url} target="_blank" rel="noreferrer" title={s.title ?? s.siteSlug} className="truncate font-medium underline-offset-4 hover:underline">
+          {s.title ?? s.siteSlug}
+        </a>
         {s.status === 'archived' && <Badge variant="secondary">archived</Badge>}
         {/* "Shared with me" feed only: an editor grantee can redeploy this site's content. */}
         {s.role === 'editor' && <Badge>You can edit</Badge>}
@@ -103,20 +106,8 @@ export function visibilityBadgeColumn<T extends SiteSummary>(): Column<T> {
   return visibilityColumn<T>((s) => <VisibilityBadge value={s.visibility} />)
 }
 
-// "Open in a new tab" button — the trailing action every site row carries.
-export function OpenLinkButton({ url }: { url: string }) {
-  return (
-    <Button asChild variant="outline" size="sm">
-      <a href={url} target="_blank" rel="noreferrer">
-        <ExternalLink />
-        Open
-      </a>
-    </Button>
-  )
-}
-
-// Trailing actions cell — the right-aligned shape shared by all three tables; `render` supplies
-// the buttons (Open + kebab / Copy + Open / Open).
+// Trailing actions cell — the right-aligned shape shared by the site tables; `render` supplies
+// the buttons (kebab / Copy). Opening a site is the row's name and URL links.
 export function actionsColumn<T>(render: (row: T) => ReactNode): Column<T> {
   return { key: 'actions', label: '', headClassName: 'text-right', cellClassName: 'text-right', render }
 }
@@ -127,12 +118,11 @@ export function feedColumns<T extends SiteSummary>(actions: (row: T) => ReactNod
   return [starColumn(), nameColumn(), urlColumn(), visibilityBadgeColumn(), createdColumn(), actionsColumn(actions)]
 }
 
-/** Copy + Open trailing cell; `children` appends row-specific extras (e.g. an owner's Share). */
-export function CopyOpenActions({ url, children }: { url: string; children?: ReactNode }) {
+/** Copy trailing cell; `children` appends row-specific extras (e.g. an owner's Share). */
+export function CopyActions({ url, children }: { url: string; children?: ReactNode }) {
   return (
     <div className="flex items-center justify-end gap-1">
       <CopyButton text={url} label="" variant="outline" />
-      <OpenLinkButton url={url} />
       {children}
     </div>
   )
