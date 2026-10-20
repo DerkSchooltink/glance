@@ -74,3 +74,50 @@ describe('scheduled — daily retention purge (issue #82)', () => {
     expect(kv.store.has(STATS_TOTALS_CACHE_KEY)).toBe(false)
   })
 })
+
+describe('WRITE_FREEZE maintenance switch', () => {
+  const statement = {
+    bind: () => statement,
+    all: async () => ({ results: [], success: true, meta: {} }),
+    run: async () => ({ results: [], success: true, meta: {} }),
+    raw: async () => [],
+  }
+  const envWith = (freeze?: string) =>
+    ({
+      ...(ENV as object),
+      DATA_TOKEN_SECRET: 'data-secret',
+      GLANCE_DB: { withSession: () => ({ prepare: () => statement, getBookmark: () => null }) },
+      GLANCE_SESSIONS: makeKv(),
+      ...(freeze === undefined ? {} : { WRITE_FREEZE: freeze }),
+    }) as never
+  const call = (method: string, path: string, env: never) =>
+    worker.fetch(new Request(`https://glance.example.com${path}`, { method }), env)
+  const writes = [
+    ['POST', '/api/sites/acme/deck/star'],
+    ['POST', '/api/_data/acme/deck/collections/todos'],
+    ['GET', '/api/auth/callback'],
+  ] as const
+
+  test.each(writes)('frozen: %s %s → 503 + Retry-After', async (method, path) => {
+    const res = await call(method, path, envWith('1'))
+    expect(res.status).toBe(503)
+    expect(res.headers.get('retry-after')).toBe('300')
+    expect(await res.json()).toEqual({ error: 'maintenance' })
+  })
+
+  test('frozen: a read route, a data-plane preflight, and the data-token mint pass', async () => {
+    expect((await call('GET', '/api/health', envWith('1'))).status).toBe(200)
+    expect((await call('OPTIONS', '/api/_data/acme/deck/collections/todos', envWith('1'))).status).toBe(204)
+    // Unauthenticated, so the route's own requireAuth answers — the freeze let it through.
+    expect((await call('POST', '/api/data-token/acme/deck', envWith('1'))).status).toBe(401)
+  })
+
+  for (const freeze of [undefined, '0']) {
+    // Reaches the route's own auth/404 handling instead (4xx), never the freeze.
+    test.each(writes)(`WRITE_FREEZE=${freeze}: %s %s is not frozen`, async (method, path) => {
+      const res = await call(method, path, envWith(freeze))
+      expect(res.status).toBeGreaterThanOrEqual(400)
+      expect(res.status).toBeLessThan(500)
+    })
+  }
+})

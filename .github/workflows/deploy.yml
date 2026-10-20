@@ -16,6 +16,9 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # Manual run (Actions -> Deploy -> Run workflow) redeploys main after a repo-variable change,
+  # e.g. flipping WRITE_FREEZE, without a merge.
+  workflow_dispatch:
 
 # Never run two deploys at once; a newer commit QUEUES behind the running deploy rather than
 # cancelling it. Killing a half-applied deploy (migrations + one worker done, the other not) leaves
@@ -31,6 +34,8 @@ permissions:
 
 jobs:
   deploy:
+    # workflow_dispatch can target any branch; only main ever deploys.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -153,12 +158,14 @@ jobs:
       # non-secret, the OAuth callback re-verifies the signed hd claim. SUPERADMIN_EMAIL is the
       # first-run superadmin (e.g. you@plivo.com) — wrangler replaces worker vars wholesale each
       # deploy, so this value must be correct here or the first admin is locked out.
+      # WRITE_FREEZE comes from repo variable WRITE_FREEZE (`1` = maintenance write freeze, default `0`).
       - name: Deploy main worker
         working-directory: packages/api
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ALLOWED_HD: ${{ vars.CF_ALLOWED_HD }}
           CF_SUPERADMIN_EMAIL: ${{ vars.CF_SUPERADMIN_EMAIL }}
+          WRITE_FREEZE: ${{ vars.WRITE_FREEZE || '0' }}
         run: |
           : "${CF_ALLOWED_HD:?set repo Actions variable CF_ALLOWED_HD}"
           : "${CF_SUPERADMIN_EMAIL:?set repo Actions variable CF_SUPERADMIN_EMAIL}"
@@ -166,7 +173,8 @@ jobs:
             --var "APP_URL:${APP_URL}" \
             --var "CONTENT_URL:${CONTENT_URL}" \
             --var "ALLOWED_HD:${CF_ALLOWED_HD}" \
-            --var "SUPERADMIN_EMAIL:${CF_SUPERADMIN_EMAIL}"
+            --var "SUPERADMIN_EMAIL:${CF_SUPERADMIN_EMAIL}" \
+            --var "WRITE_FREEZE:${WRITE_FREEZE}"
 
       - name: Deploy content worker
         working-directory: packages/api
