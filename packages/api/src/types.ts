@@ -50,6 +50,8 @@ export interface Bindings {
   CONTENT_URL: string
   ALLOWED_HD: string
   SUPERADMIN_EMAIL: string
+  // Optional maintenance switch: "1" → writes and login return 503 + Retry-After (see index.ts).
+  WRITE_FREEZE?: string
 }
 
 /** The minimal user identity stored in KV and attached to the request context. */

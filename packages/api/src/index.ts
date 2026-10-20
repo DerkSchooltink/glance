@@ -83,6 +83,17 @@ app.get('/api/glance.js', (c) =>
 // (the /api/install idiom) so agents can fetch a brief with plain curl before generating.
 app.route('/api/themes', themes)
 
+// Maintenance write freeze (e.g. during a database migration). WRITE_FREEZE=1 answers every
+// unsafe /api/* request with 503 + Retry-After, plus GET /api/auth/callback (login writes the users
+// row). Registered BEFORE /api/_data and the guards so the data plane freezes too; reads and
+// preflights pass untouched. Unset or 0 → no-op.
+app.use('/api/*', async (c, next) => {
+  if (c.env.WRITE_FREEZE !== '1') return next()
+  const safe = ['GET', 'HEAD', 'OPTIONS'].includes(c.req.method) && c.req.path !== '/api/auth/callback'
+  if (safe) return next()
+  return c.json({ error: 'maintenance' }, 503, { 'Retry-After': '300' })
+})
+
 // Shared-backend data plane. Registered BEFORE the /api/* guards (like /api/install): it is
 // bearer-token authenticated and cross-origin from the content origin, so it must NOT inherit
 // the cookie-based same-origin CSRF guard, and it manages its own DB + CORS. See routes/data.ts.
