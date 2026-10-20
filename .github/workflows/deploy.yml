@@ -133,16 +133,19 @@ jobs:
       # Read replication (issue #79): a DB-level setting with no wrangler command — REST only.
       # Reads then route to the nearest replica via the Sessions API adopted in the workers;
       # billing is unchanged (still rows_read/rows_written). PUT is idempotent per deploy.
-      - name: Ensure D1 read replication is enabled
+      # Mode comes from repo variable D1_READ_REPLICATION_MODE (`auto` | `disabled`, default `auto`);
+      # set `disabled` if replica lag causes query stalls, so deploys don't re-enable it.
+      - name: Apply D1 read replication mode
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ACCOUNT_ID: ${{ vars.CF_ACCOUNT_ID }}
           CF_D1_DATABASE_ID: ${{ vars.CF_D1_DATABASE_ID }}
+          MODE: ${{ vars.D1_READ_REPLICATION_MODE || 'auto' }}
         run: |
           out="$(curl -sS -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/d1/database/${CF_D1_DATABASE_ID}" \
             -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
             -H "Content-Type: application/json" \
-            -d '{"read_replication": {"mode": "auto"}}')"
+            -d '{"read_replication": {"mode": "'"$MODE"'"}}')"
           echo "$out" | grep -q '"success": *true' || { echo "$out" >&2; exit 1; }
 
       # Plain worker vars go in as --var flags (merged over the committed vars block, which keeps
