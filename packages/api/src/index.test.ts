@@ -105,9 +105,11 @@ describe('WRITE_FREEZE maintenance switch', () => {
     expect(await res.json()).toEqual({ error: 'maintenance' })
   })
 
-  test('frozen: a read route and a data-plane preflight pass', async () => {
+  test('frozen: a read route, a data-plane preflight, and the data-token mint pass', async () => {
     expect((await call('GET', '/api/health', envWith('1'))).status).toBe(200)
     expect((await call('OPTIONS', '/api/_data/acme/deck/collections/todos', envWith('1'))).status).toBe(204)
+    // Unauthenticated, so the route's own requireAuth answers — the freeze let it through.
+    expect((await call('POST', '/api/data-token/acme/deck', envWith('1'))).status).toBe(401)
   })
 
   for (const freeze of [undefined, '0']) {

@@ -113,4 +113,4 @@ The Google button appears automatically once both credentials are set. A later G
 
 ### Maintenance write freeze
 
-For a maintenance window (e.g. a database migration), set repo Actions variable `WRITE_FREEZE` to `1` and run the Deploy workflow manually (Actions → Deploy → Run workflow). The main worker then answers every `/api/*` write, and login, with `503` + `Retry-After: 300`; reads keep working. Set it back to `0` (or delete it) and run the workflow again to lift the freeze.
+For a maintenance window (e.g. a database migration), set repo Actions variable `WRITE_FREEZE` to `1` and run the Deploy workflow manually (Actions → Deploy → Run workflow). The main worker then answers every `/api/*` write, and login, with `503` + `Retry-After: 300`; reads keep working. Best-effort writers are not frozen and fail without user impact if the database rejects them: page-view and CLI-usage events, API-key last-used timestamps, and the daily retention cron. Set it back to `0` (or delete it) and run the workflow again to lift the freeze.

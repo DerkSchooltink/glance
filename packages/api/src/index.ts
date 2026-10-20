@@ -86,11 +86,12 @@ app.route('/api/themes', themes)
 // Maintenance write freeze (e.g. during a database migration). WRITE_FREEZE=1 answers every
 // unsafe /api/* request with 503 + Retry-After, plus GET /api/auth/callback (login writes the users
 // row). Registered BEFORE /api/_data and the guards so the data plane freezes too; reads and
-// preflights pass untouched. Unset or 0 → no-op.
+// preflights pass untouched, as does the data-token mint (a POST that writes nothing, needed for
+// glance.db reads). Unset or 0 → no-op.
 app.use('/api/*', async (c, next) => {
   if (c.env.WRITE_FREEZE !== '1') return next()
-  const safe = ['GET', 'HEAD', 'OPTIONS'].includes(c.req.method) && c.req.path !== '/api/auth/callback'
-  if (safe) return next()
+  const read = ['GET', 'HEAD', 'OPTIONS'].includes(c.req.method) && c.req.path !== '/api/auth/callback'
+  if (read || c.req.path.startsWith('/api/data-token/')) return next()
   return c.json({ error: 'maintenance' }, 503, { 'Retry-After': '300' })
 })
 
