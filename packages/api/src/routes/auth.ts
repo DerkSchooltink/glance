@@ -16,10 +16,12 @@ import {
   isOidcEnabled,
   type OidcClaims,
   type OidcEndpoints,
+  oidcGroups,
   oidcScopes,
   oidcSubjectKey,
   withUserinfo,
 } from '../lib/oidc'
+import { isOidcSyncEnabled, syncOidcAccess } from '../lib/oidc-access'
 import {
   bearerToken,
   createCliToken,
@@ -135,6 +137,14 @@ auth.get('/callback', async (c) => {
   }
 
   const db = c.get('db')
+  // Group membership and the admin role are written only by an OIDC sign-in, so while that sync is
+  // on, a Google session would outlive access the provider already revoked. Make the provider's
+  // button the only way in for an account it has claimed.
+  if (isOidcSyncEnabled(c.env)) {
+    const [account] = await db.select({ oidcSub: users.oidcSub }).from(users).where(eq(users.email, email)).limit(1)
+    if (account?.oidcSub) return c.redirect('/login?error=sso')
+  }
+
   const user = await signingIn(c, () => findOrCreateIdentity(db, c.env, 'google', claims, email))
   if (user instanceof Response) return user
   await createSession(c, user)
@@ -188,8 +198,9 @@ auth.get('/oidc/callback', async (c) => {
   const email = accepted.email
 
   const db = c.get('db')
-  const user = await signingIn(c, () => findOrCreateIdentity(db, c.env, 'oidc', claims, email))
-  if (user instanceof Response) return user
+  const identity = await signingIn(c, () => findOrCreateIdentity(db, c.env, 'oidc', claims, email))
+  if (identity instanceof Response) return identity
+  const user = await syncOidcAccess(db, c.env, identity, oidcGroups(claims, c.env))
   await createSession(c, user)
   return c.redirect(safeNext(round.stored.next) ?? '/dashboard')
 })

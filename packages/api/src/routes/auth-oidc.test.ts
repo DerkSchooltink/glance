@@ -42,6 +42,9 @@ beforeEach(() => {
       tokenRequests.push(new URLSearchParams(await req.text()))
       return Response.json({ access_token: 'at', token_type: 'Bearer', id_token: idToken(idTokenClaims) })
     }
+    if (req.url === 'https://oauth2.googleapis.com/token') {
+      return Response.json({ access_token: 'at', token_type: 'Bearer', expires_in: 3600, id_token: idToken(idTokenClaims) })
+    }
     if (req.url === USERINFO && req.headers.get('authorization') === 'Bearer at' && userinfo) {
       return Response.json(userinfo)
     }
@@ -96,6 +99,16 @@ async function signIn(app: Hono<AppEnv>, env: AppEnv['Bindings'], next = '') {
   const cookie = (start.headers.get('set-cookie') ?? '').split(';')[0]
   return app.request(`/api/auth/oidc/callback?code=the-code&state=${state}`, { headers: { cookie } }, env)
 }
+
+/** The same round-trip through the Google routes (the token endpoint is mocked above). */
+async function googleSignIn(app: Hono<AppEnv>, env: AppEnv['Bindings']) {
+  const start = await app.request('/api/auth/google', {}, env)
+  const state = new URL(start.headers.get('location') ?? '').searchParams.get('state')
+  const cookie = (start.headers.get('set-cookie') ?? '').split(';')[0]
+  return app.request(`/api/auth/callback?code=the-code&state=${state}`, { headers: { cookie } }, env)
+}
+
+const GOOGLE_ENV = { GOOGLE_CLIENT_ID: 'g-id', GOOGLE_CLIENT_SECRET: 'g-secret' }
 
 describe('OIDC sign-in routes', () => {
   test('inert without issuer, client id and secret → 404 on both routes', async () => {
@@ -279,5 +292,42 @@ describe('OIDC sign-in routes', () => {
     const res = await app.request(`/api/auth/oidc/callback?code=c&state=${state}`, { headers: { cookie } }, env)
     expect(res.headers.get('location')).toBe('/login?error=state')
     expect(tokenRequests).toHaveLength(0)
+  })
+
+  test('the admin group sets the role, a missing claim leaves it, an empty list demotes', async () => {
+    const { app, env, db } = setup({ OIDC_ADMIN_GROUP: 'app.glance.admins' })
+
+    idTokenClaims = claims({ groups: ['app.glance.admins'] })
+    await signIn(app, env)
+    expect((await db.select().from(users))[0]?.role).toBe('superadmin')
+
+    // No groups claim at all is "unknown" (lib/oidc.ts oidcGroups), not "no groups".
+    idTokenClaims = claims()
+    await signIn(app, env)
+    expect((await db.select().from(users))[0]?.role).toBe('superadmin')
+
+    idTokenClaims = claims({ groups: [] })
+    await signIn(app, env)
+    expect((await db.select().from(users))[0]?.role).toBe('member')
+  })
+
+  test('a Google sign-in is refused for an OIDC account while the admin sync is on', async () => {
+    const { app, env, db } = setup({ ...GOOGLE_ENV, OIDC_ADMIN_GROUP: 'app.glance.admins' })
+    await db.insert(users).values({ id: 'u', email: 'john.doe@example.com', oidcSub: `${ISSUER} idp-john` })
+    idTokenClaims = { sub: 'g-1', email: 'john.doe@example.com', email_verified: true, hd: 'example.com' }
+
+    const res = await googleSignIn(app, env)
+    expect(res.headers.get('location')).toBe('/login?error=sso')
+    expect(res.headers.get('set-cookie') ?? '').not.toContain('__Host-glance_session=')
+  })
+
+  test('without the sync, Google still signs that account in and links the googleId', async () => {
+    const { app, env, db } = setup(GOOGLE_ENV)
+    await db.insert(users).values({ id: 'u', email: 'john.doe@example.com', oidcSub: `${ISSUER} idp-john` })
+    idTokenClaims = { sub: 'g-1', email: 'john.doe@example.com', email_verified: true, hd: 'example.com' }
+
+    const res = await googleSignIn(app, env)
+    expect(res.headers.get('location')).toBe('/dashboard')
+    expect((await db.select().from(users))[0]).toMatchObject({ id: 'u', googleId: 'g-1' })
   })
 })
