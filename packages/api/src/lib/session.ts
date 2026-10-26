@@ -1,9 +1,13 @@
 import type { Context } from 'hono'
 import { deleteCookie, getSignedCookie, setSignedCookie } from 'hono/cookie'
+import { eq } from 'drizzle-orm'
 import { getUserById } from '../db/repo'
+import { users } from '../db/schema'
 import type { AppEnv, Credential, SessionUser } from '../types'
 import { API_KEY_PREFIX, apiKeyDb, resolveApiKey, touchApiKeyLastUsed } from './api-key'
 import { fireAndForget } from './events'
+import { oidcSubjectKey } from './oidc'
+import { isOidcBearerEnabled, looksLikeJwt, verifyOidcBearer } from './oidc-bearer'
 
 const SESSION_COOKIE = '__Host-glance_session'
 const SESSION_TTL = 60 * 60 * 24 // 24h
@@ -125,6 +129,17 @@ export async function readCredential(c: Context<AppEnv>): Promise<Credential | n
     // never allowed to fail the request (touchApiKeyLastUsed swallows its own errors).
     await fireAndForget(c, touchApiKeyLastUsed(db, resolved.id, resolved.lastUsedAt))
     return { kind: 'key', user: keyUser, keyId: resolved.id, grants: resolved.grants }
+  }
+
+  // A provider-issued JWT is verified against the provider's keys and never falls through to the
+  // KV token store, for the same reason as a bad API key above. The user must already exist: a
+  // first sign-in happens in the browser, the CLI only reuses that account.
+  if (isOidcBearerEnabled(c.env) && looksLikeJwt(token)) {
+    const sub = await verifyOidcBearer(c.env, token)
+    if (!sub) return null
+    const row = (await c.get('db').select({ id: users.id }).from(users).where(eq(users.oidcSub, oidcSubjectKey(c.env.OIDC_ISSUER as string, sub))).limit(1))[0]
+    const user = row ? await getUserById(c.get('db'), row.id) : null
+    return user ? { kind: 'cli', user } : null
   }
 
   const cliUser = await readCliToken(c, token)
